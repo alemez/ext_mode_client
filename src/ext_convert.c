@@ -897,6 +897,7 @@ static void Int33Plus_TargetToHost(
 } /*lint !e952 !e818 Parameter 'ES' could be declared const and as pointing to
    * const*//* end Int33Plus_TargetToHost */
 
+#ifdef ERR
 /* Function: Copy32BitsToTarget ================================================
  * Abstract:
  *  Copy 32 bits to the target.  It is assumed that the only conversion needed
@@ -1103,3 +1104,4 @@ void InstallIntegerOnlyDoubleConversionRoutines(ExternalSim *ES)
 
 
 /* [EOF] ext_convert.c */
+#endif

@@ -12,6 +12,10 @@
  *  o control the target program
  */
 
+/*
+ * Changed all the mexPrintf statements to fprintf
+ */
+
 #include "extsim.h"  /* ext_mode data struct */
  
 /*
@@ -61,9 +65,9 @@ PRIVATE void ExtCommMain(
          * in the documentation for Simulink S-functions.
          * See <matlabroot>/simulink/src/sfuntmpl_doc.c.
          */
-        esSetMexFuncGateWayFcn(ES,ExtCommMain);
+        //esSetMexFuncGateWayFcn(ES,ExtCommMain);
     } else {
-	mexPrintf("This external mex file is used by Simulink in external "
+	fprintf("This external mex file is used by Simulink in external "
 		  "mode\nfor communicating with Code Generation targets "
 		  "using interprocess communications.\n");
         goto EXIT_POINT;
@@ -78,94 +82,94 @@ PRIVATE void ExtCommMain(
     case EXT_CONNECT:
         /* Connect to target. */
         ExtConnect(ES, nrhs, prhs);        
-        if (esGetVerbosity(ES)) mexPrintf("action: EXT_CONNECT\n");
+        if (esGetVerbosity(ES)) fprintf("action: EXT_CONNECT\n");
         break;
 
     case EXT_DISCONNECT_REQUEST:
         /* Request to terminate communication has been made - notify target. */
-        if (esGetVerbosity(ES)) mexPrintf("action: EXT_DISCONNECT_REQUEST\n");
+        if (esGetVerbosity(ES)) fprintf("action: EXT_DISCONNECT_REQUEST\n");
         ExtDisconnectRequest(ES, nrhs, prhs);
         break;
 
     case EXT_DISCONNECT_REQUEST_NO_FINAL_UPLOAD:
         /* Request to terminate communication has been made - notify target. */
         if (esGetVerbosity(ES)) {
-            mexPrintf("action: EXT_DISCONNECT_REQUEST_NO_FINAL_UPLOAD\n");
+            fprintf("action: EXT_DISCONNECT_REQUEST_NO_FINAL_UPLOAD\n");
         }
         ExtDisconnectRequestNoFinalUpload(ES, nrhs, prhs);
         break;
 
     case EXT_DISCONNECT_CONFIRMED:
         /* Terminate communication with target. */
-        if (esGetVerbosity(ES)) mexPrintf("action: EXT_DISCONNECT_CONFIRMED\n");
+        if (esGetVerbosity(ES)) fprintf("action: EXT_DISCONNECT_CONFIRMED\n");
         ExtDisconnectConfirmed(ES, nrhs, prhs);
         break;
 
     case EXT_SETPARAM: 
         /* Download parameters to be set on target. */
-        if (esGetVerbosity(ES)) mexPrintf("action: EXT_SETPARAM\n");
+        if (esGetVerbosity(ES)) fprintf("action: EXT_SETPARAM\n");
         ExtSendGenericPkt(ES, nrhs, prhs);
         break;
 
     case EXT_GETPARAMS:
         /* Upload interfaceable variables from target. */
-        if (esGetVerbosity(ES)) mexPrintf("action: EXT_GETPARAMS\n");
+        if (esGetVerbosity(ES)) fprintf("action: EXT_GETPARAMS\n");
         ExtGetParams(ES, nrhs, prhs);
         break;
 
     case EXT_SELECT_SIGNALS: 
         /* Select signals for data uploading. */
-        if (esGetVerbosity(ES)) mexPrintf("action: EXT_SELECT_SIGNALS\n");
+        if (esGetVerbosity(ES)) fprintf("action: EXT_SELECT_SIGNALS\n");
         ExtSendGenericPkt(ES, nrhs, prhs);
         break;
 
     case EXT_SELECT_TRIGGER: 
         /* Select signals for data uploading. */
-        if (esGetVerbosity(ES)) mexPrintf("action: EXT_SELECT_TRIGGER\n");
+        if (esGetVerbosity(ES)) fprintf("action: EXT_SELECT_TRIGGER\n");
         ExtSendGenericPkt(ES, nrhs, prhs);
         break;
 
     case EXT_ARM_TRIGGER: 
         /* Select signals for data uploading. */
-        if (esGetVerbosity(ES)) mexPrintf("action: EXT_ARM_TRIGGER\n");
+        if (esGetVerbosity(ES)) fprintf("action: EXT_ARM_TRIGGER\n");
         ExtSendGenericPkt(ES, nrhs, prhs);
         break;
 
     case EXT_CANCEL_LOGGING:
         /* Send packet to target to cancel the current data logging session. */
-        if (esGetVerbosity(ES)) mexPrintf("action: EXT_CANCEL_LOGGING\n");
+        if (esGetVerbosity(ES)) fprintf("action: EXT_CANCEL_LOGGING\n");
         ExtSendGenericPkt(ES, nrhs, prhs);
         break;
 
     case EXT_MODEL_START:
         /* Start the external simulation. */
-        if (esGetVerbosity(ES)) mexPrintf("action: EXT_MODEL_START\n");
+        if (esGetVerbosity(ES)) fprintf("action: EXT_MODEL_START\n");
         ExtSendGenericPkt(ES, nrhs, prhs);
         break;
 
     case EXT_MODEL_STOP:
         /* Stop the external simulation and kill target program. */
-        if (esGetVerbosity(ES)) mexPrintf("action: EXT_MODEL_STOP\n");
+        if (esGetVerbosity(ES)) fprintf("action: EXT_MODEL_STOP\n");
         ExtSendGenericPkt(ES, nrhs, prhs);
         break;
 
     case EXT_MODEL_PAUSE:
         /* Pause the target (internal testing only). */
-        if (esGetVerbosity(ES)) mexPrintf("action: EXT_MODEL_PAUSE\n");
+        if (esGetVerbosity(ES)) fprintf("action: EXT_MODEL_PAUSE\n");
         ExtSendGenericPkt(ES, nrhs, prhs);
         break;
     
     case EXT_MODEL_STEP:
         /* Run the model for 1 step - if paused (internal
            testing only). */
-        if (esGetVerbosity(ES)) mexPrintf("action: EXT_MODEL_STEP\n");
+        if (esGetVerbosity(ES)) fprintf("action: EXT_MODEL_STEP\n");
         ExtSendGenericPkt(ES, nrhs, prhs);
         break;
 
     case EXT_MODEL_CONTINUE:
         /* Run the model for 1 step - if paused (internal
            testing only). */
-        if (esGetVerbosity(ES)) mexPrintf("action: EXT_MODEL_CONTINUE\n");
+        if (esGetVerbosity(ES)) fprintf("action: EXT_MODEL_CONTINUE\n");
         ExtSendGenericPkt(ES, nrhs, prhs);
         break;
 
@@ -177,7 +181,7 @@ PRIVATE void ExtCommMain(
          *  Skip verbosity.  There are too many of these packets when
          *  auto-updating Simulink's status bar clock.
          */
-        /*if (esGetVerbosity(ES)) mexPrintf("action: EXT_GET_TIME\n");*/
+        /*if (esGetVerbosity(ES)) fprintf("action: EXT_GET_TIME\n");*/
         ExtSendGenericPkt(ES, nrhs, prhs);
         break;
 

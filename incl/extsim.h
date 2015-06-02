@@ -81,7 +81,7 @@ struct ExternalSim_tag {
     ExtModeAction action;   /* action flag - determines current operation */
     boolean_T     verbose;  /* verbose mode?                              */
 
-    int   connectTimeoutSecs;  /* connect timeout                    */
+    int   connectTimeoutSecs;  /* connect timeout                   */
     
     ConnectionStatus connectionStatus;
 
@@ -115,7 +115,7 @@ struct ExternalSim_tag {
     } incomingPkt;
 
     /*
-     * Target data represention.
+     * Target data representation.
      */
     struct {
         boolean_T intOnly;                /* target built with integer only flag? */
@@ -190,8 +190,8 @@ struct ExternalSim_tag {
     } DTypeFcn;
 
     /* "shortcut" for calling mexfile */
-    MexFuncGateWayFcn mexFunc;
-    Mfh_MATLAB_fn *   mexFuncHandle;
+   // MexFuncGateWayFcn mexFunc;
+   // Mfh_MATLAB_fn *   mexFuncHandle;
 };
 
 
