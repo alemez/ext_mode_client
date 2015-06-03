@@ -14,6 +14,7 @@
 //#include "extsim.h"
 #include "extutil.h"
 #include "main_incl.h"
+#include "matrix.h"
 
 #include "ext_convert.h"
 //#include "ext_comm.c"
@@ -103,6 +104,8 @@ typedef struct UserData_tag {
  */
 void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 {
+	printf("\n---MyExtConnect---");
+	fflush(stdout);
 	int_T          nGot;
 	int_T          nSet;
 	PktHeader      pktHdr;
@@ -135,11 +138,14 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 
 	        esSetUserData(ES, (void*)userData);
 	    }
+
 	    /*
 	     * Parse the arguments.
 	     */
 	    assert(esIsErrorClear(ES));
+	    //Problem here
 	    MyExtProcessArgs(ES,hostName,arr);
+
 	    if (!esIsErrorClear(ES)) {
 	        const char errMsgHeader[] = "Failed to connect to the target. Possible reasons for the failure:";
 	        sprintf(failedToConnectErrMsg, "%s\n %s\n Caused by:\n %s", errMsgHeader, failedToConnectCauses, esGetError(ES));
@@ -147,6 +153,7 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 	        esSetError(ES, failedToConnectErrMsg);
 	        goto EXIT_POINT;
 	   }
+
 
 	    assert(esIsErrorClear(ES));
 	    timeOutSecs  =  (long int) esGetConnectTimeout(ES);
@@ -362,7 +369,8 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
  */
 void MyExtProcessArgs(ExternalSim *ES, const char hostName[], const int arr[])
 {
-
+	printf("\n---MyExtProcessArgs---");
+	fflush(stdout);
     int argc = 0;
     const char * argv[ARGC_MAX] = ARGV_INIT;
     MyUserData  * const userData = (MyUserData *)esGetUserData(ES);
@@ -381,7 +389,8 @@ void MyExtProcessArgs(ExternalSim *ES, const char hostName[], const int arr[])
         int error;
         error = ExtUtilLoadSharedLib(&userData->rtiostreamData);
         if (error != 0) {
-
+        	fprintf(stderr,"\n---Error loading rtIOStream shared library---");
+        	fflush(stdout);
             /* Error out immediately */
 //            mexErrMsgIdAndTxt("rtiostream_interface:ExtProcessArgs:"
 //                              "LoadSharedLibFailure",
@@ -389,9 +398,12 @@ void MyExtProcessArgs(ExternalSim *ES, const char hostName[], const int arr[])
 //                              "see command window for details.");
 
         } else {
-
+        	printf("\n---1---");
+        		    fflush(stdout);
             /* Call rtIOStreamOpen */
             userData->rtiostreamData.streamID = ( *(userData->rtiostreamData.libH.openFn) ) (argc, (void *)argv);
+            printf("\n---2---");
+            	    fflush(stdout);
             if (userData->rtiostreamData.streamID == -1) {
                 const char msg[] =
                     "An error occurred attempting to open an rtIOStream. More detail "
@@ -530,35 +542,32 @@ int MyExtUtilCreateRtIOStreamArgs(ExternalSim   *ES,
 	   if( arr[0]==0 || arr[0]==1) {
 	      int argValue = 0;
 	      //errorOccurred = ExtUtilProcessVerboseArg(ES, arr[0], &argValue);
-	      if (errorOccurred) {
-	         return errorOccurred;
-	      }
-	      else {
 	         esSetVerbosity(ES, argValue); /*lint !e734 loss of precision 31 bits to 8 bits*/
-	      }
 	   }
+	   else{
+		   	   errorOccurred=1;
+	 	        return errorOccurred;
+	 	   }
 
 
 	   /* ... Argument 3 - TCP port value */
 	   if(arr[1]>=256 && arr[1]<=65535){
 		   char * argValue = 0;
 	      //errorOccurred = ExtUtilProcessTCPIPPortArg(ES, arr[1], &argValue);
-	      if (errorOccurred) {
-	         return errorOccurred;
-	      }
-	      else {
 	         argv[(*argc)++] = "-port";
 	         argv[(*argc)++] = argValue;
-	      }
 	   }
+	   else{
+		   	   errorOccurred=1;
+	 	        return errorOccurred;
+	 	   }
+
 	   /* ... Argument 4 - connection timeout */
 	   if(arr[2]<0 ){ //add error checking for real scalar int
 		   errorOccurred=1;
 		   return errorOccurred;
 	       //errorOccurred = ExtUtilProcessConnectTimeoutArg(ES, arr[2], &connectTimeOutSecs);
 	   }
-
-
 
 	   esSetConnectTimeout(ES, connectTimeOutSecs); /*lint !e734 loss of precision 31 bits to 8 bits*/
 
@@ -577,7 +586,6 @@ int MyExtUtilCreateRtIOStreamArgs(ExternalSim   *ES,
  *    Hardcoded version
  */
 int main(void) {
-	puts("!!!Hello World!!!"); /* prints !!!Hello World!!! */
 
 	ExternalSim  *ES;	/*Pointer to ExternalSim struct, to pass as args*/
 
@@ -589,6 +597,8 @@ int main(void) {
 	const char *fileName="test.txt"; //will of course have to be dynamic
 
 	rtwPtr= fopen(fileName, "r");
+
+
 
 	if(rtwPtr==NULL)
 	{
@@ -632,14 +642,18 @@ int main(void) {
 	fclose(rtwPtr);
 
 	arr[0]=esGetVerbosity(ES);
-	//arr[1]=TCP port value
+	arr[1]=17725; //TCP port value
 	arr[2]=esGetConnectTimeout(ES);
 
+	printf("\n---Switch case:---");
+    fflush(stdout);
 
 	switch(esGetAction(ES)) {
 
 	    case EXT_CONNECT:
 	        /* Connect to target. */
+	    	printf("\n---EXT_CONNECT---");
+	    	fflush(stdout);
 	        MyExtConnect(ES, name, arr);
 	        if (esGetVerbosity(ES)) {
 	        	printf("\naction: EXT_CONNECT\n");
@@ -657,5 +671,7 @@ int main(void) {
 
 
 	EXIT_POINT:
+	printf("\n---!!!Exit Success!!!---");
+	fflush(stdout);
 	return EXIT_SUCCESS;
 }
