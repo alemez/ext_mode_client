@@ -7,6 +7,9 @@
  * Headers for utility functions in ext_util.c.
  */
 
+#ifndef EXT_CONVERT_H
+#define EXT_CONVERT_H
+
 extern void Copy32BitsToTarget(
     ExternalSim  *ES,
     char         *dst,
@@ -24,3 +27,6 @@ extern void ProcessConnectResponse1(ExternalSim *ES, PktHeader *pktHdr);
 extern void ProcessTargetDataSizes(ExternalSim *ES, uint32_T *bufPtr);
 
 extern void InstallIntegerOnlyDoubleConversionRoutines(ExternalSim *ES);
+
+
+#endif /*EXT_CONVERT_H*/
