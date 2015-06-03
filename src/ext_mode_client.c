@@ -187,7 +187,7 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 	      }
 	        assert(pending);
 
-	        error = ExtRecvIncomingPktHeader(ES, &pktHdr);
+	        error = MyExtRecvIncomingPktHeader(ES, &pktHdr);
 	        if (error) goto EXIT_POINT;
 
 	        ProcessConnectResponse1(ES, &pktHdr);
@@ -231,7 +231,7 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 	          }
 	            assert(pending);
 
-	        error = ExtRecvIncomingPktHeader(ES, &pktHdr);
+	        error = MyExtRecvIncomingPktHeader(ES, &pktHdr);
 	        if (error) goto EXIT_POINT;
 
 	        Copy32BitsFromTarget(ES, (uint32_T *)&pktHdr, (char *)&pktHdr, NUM_HDR_ELS);
@@ -345,7 +345,7 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 	    EXIT_POINT:
 	       if (!esIsErrorClear(ES)) {
 	            ExtCloseConnection(ES);
-	            FreeAndNullUserData(ES);
+	            MyFreeAndNullUserData(ES);
 	        }
 }/*End MyExtComm */
 
@@ -353,13 +353,33 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 /*Function: MyExtProcessArgs=============================================
  * Abstract:
  * 	Adapted version on ExtProcessArgs without nrhs and prhs args
+ * 	from rtiostream_interface.c
  *
  */
 void MyExtProcessArgs(ExternalSim *ES, const char hostName[], const int arr[])
 {
-	//look in rtiostream_interface.c
+
 }/*end MyExtProcessArgs*/
 
+/*Function: MyFreeAndNullUserData===========================================
+ * Abstract:
+ * 	version of FreeAndNullUserData (ext_comm.c)
+ *
+ */
+void MyFreeAndNullUserData(ExternalSim *ES)
+{
+    ExtUserDataDestroy(esGetUserData(ES));
+    esSetUserData(ES, NULL);
+} /* end FreeAndNullUserData */
+
+/*Function: MyExtRecvIncomingPktHeader======================================
+ * Abstract:
+ * 	version of ExtRecvIncomingPktHeader from ext_comm.c *
+ */
+boolean_T MyExtRecvIncomingPktHeader( ExternalSim *ES, PktHeader   *pktHdr)
+{
+	return 0;
+}
 
 /* Function: main =======================================================
  * Abstract:
