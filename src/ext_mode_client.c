@@ -11,11 +11,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "extsim.h"
+//#include "extsim.h"
 #include "extutil.h"
 #include "main_incl.h"
 
-//#include "ext_convert.c"
+#include "ext_convert.h"
 //#include "ext_comm.c"
 
 /*Function: ExtSimStructDef====================================================
@@ -90,7 +90,6 @@ ExternalSim* ExtSimStructDef(FILE* fIn )
 	return es;
 }
 
-#ifdef COMMENTOUT
 /*
  * From rtiostram_interface.c
  * Used in function MyExtConnect
@@ -349,7 +348,7 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 	            FreeAndNullUserData(ES);
 	        }
 }/*End MyExtComm */
-#endif
+
 
 /*Function: MyExtProcessArgs=============================================
  * Abstract:

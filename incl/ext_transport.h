@@ -7,6 +7,9 @@
  *  PUBLIC interface for ext_<mechanism>_transport.c.
  */
 
+#ifndef EXT_TRANSPORT_H
+#define EXT_TRANSPORT_H
+
 /********************* DO NOT CHANGE BELOW THIS LINE **************************
  *                                                                            *
  * The function prototypes below define the interface between ext_comm and    *
@@ -57,3 +60,4 @@ extern void ExtProcessArgs(
     int           nrhs,
     const mxArray *prhs[]);
 
+#endif /*EXT_TRANSPORT_H*/

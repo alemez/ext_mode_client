@@ -24,7 +24,7 @@
  *
  *  ??? This function seems a bit over complicated.
  */
-static void slCopyTwoBytes(
+ void slCopyTwoBytes(
     void       *y,         /* Pointer to start of dst   */
     const void *x,	   /* Pointer to start of src   */
     const unsigned long n, /* Number elements in vector */
@@ -172,7 +172,7 @@ static void slCopyTwoBytes(
  *  sources and destinations.  If src and dst are the same, the function
  *  performs "in place" byte swapping.
  */
-static void slCopyFourBytes(
+ void slCopyFourBytes(
     void       *y,        /* Pointer to start of dst   */
     const void *x,	  /* Pointer to start of src   */
     const int  n,         /* Number elements in vector */
@@ -242,7 +242,7 @@ static void slCopyFourBytes(
  *  and unaligned sources and destinations.  If src and dst are the same, the
  *  function performs "in place" byte swapping.
  */
-static void slCopyEightBytes(
+ void slCopyEightBytes(
     void       *y,       /* Pointer to start of dst   */
     const void *x,	 /* Pointer to start of src   */
     const int  n,        /* Number elements in vector */
@@ -332,7 +332,7 @@ static void slCopyEightBytes(
  *  is just a dispatcher for pre-existing byte swapper/copier functions
  *  (2, 4, 8 byte swaps).
  */
-static void slCopyNBytes(
+ void slCopyNBytes(
     void       *y,        /* Pointer to start of dst   */
     const void * const x, /* Pointer to start of src   */
     const int  n,         /* Number elements in vector */
@@ -374,7 +374,7 @@ static void slCopyNBytes(
  * endian word ordering for doubles, so we need to swap the high and
  * low 4 bytes to interpret doubles correctly on the host.
  */
-static void DoubleSwap4ByteWords(
+ void DoubleSwap4ByteWords(
         const char * const src,
         char * const dst,
         int n)
@@ -405,7 +405,7 @@ static void DoubleSwap4ByteWords(
  *  The src pointer is aligned for type double.  As implemented, this function
  *  supports only 32 and 64 bit target real values (ieee).
  */
-static void Double_HostToTarget(
+ void Double_HostToTarget(
     ExternalSim   *ES,/*lint !e952 Parameter 'ES' could be declared const */
     char          *dst,
     const void    * const voidSrc,
@@ -461,7 +461,7 @@ static void Double_HostToTarget(
  *  for type double.  As implemented, this function supports only 32 and 64 bit
  *  target real values (ieee).
  */
-static void Double_TargetToHost(
+ void Double_TargetToHost(
     ExternalSim   *ES,
     void          *voidDst,
     const char    *src,
@@ -539,7 +539,7 @@ static void Double_TargetToHost(
  *  As implemented, this function supports only 32 and 64 bit target
  *  integer values.
  */
-static void Double_TargetToHost_IntOnly(
+ void Double_TargetToHost_IntOnly(
     ExternalSim   *ES,
     void          *voidDst,
     const char    *src,
@@ -607,7 +607,7 @@ static void Double_TargetToHost_IntOnly(
  *  As implemented, this function supports only 32 and 64 bit target
  *  integer values.
  */
-static void Double_HostToTarget_IntOnly(
+ void Double_HostToTarget_IntOnly(
     ExternalSim   *ES,
     char          *dst,
     const void    * const voidSrc,
@@ -655,7 +655,7 @@ static void Double_HostToTarget_IntOnly(
  *  supports either uint8_T boolean values on the target or uint32_T booleans
  *  on the target (for dsps that support only 32-bit words).
  */
-static void Bool_HostToTarget(
+ void Bool_HostToTarget(
     ExternalSim   *ES,
     char          *dst,
     const void    * const voidSrc,
@@ -712,7 +712,7 @@ static void Bool_HostToTarget(
  *  values on the target or uint32_T booleans on the target (for dsps that
  *  support only 32-bit words).
  */
-static void Bool_TargetToHost(
+ void Bool_TargetToHost(
     ExternalSim   *ES,
     void          *voidDst,
     const char    *src,
@@ -783,7 +783,7 @@ static void Bool_TargetToHost(
  *  byte swapping if required.  If any other conversion is required, then
  *  a custom HostToTarget function must be used.
  */
-static void Generic_HostToTarget(
+ void Generic_HostToTarget(
     ExternalSim   *ES,
     char          *dst,
     const void    * const src,
@@ -807,7 +807,7 @@ static void Generic_HostToTarget(
  *  byte swapping if required.  If any other conversion is required, then
  *  a custom TargetToHost function must be used.
  */
-static void Generic_TargetToHost(
+ void Generic_TargetToHost(
     ExternalSim  *ES,
     void         *dst,
     const char   * const src,
@@ -842,7 +842,7 @@ static void Generic_TargetToHost(
  *  of an array of smaller elements.  So we adjust the value of "n" to account
  *  for these extra elements when copying the data.
  */
-static void Int33Plus_HostToTarget(
+ void Int33Plus_HostToTarget(
     ExternalSim   *ES,
     char          *dst,
     const void    * const src,
@@ -880,7 +880,7 @@ static void Int33Plus_HostToTarget(
  *  of an array of smaller elements.  So we adjust the value of "n" to account
  *  for these extra elements when copying the data.
  */
-static void Int33Plus_TargetToHost(
+ void Int33Plus_TargetToHost(
     ExternalSim  *ES,
     void         *dst,
     const char   * const src,

@@ -22,6 +22,62 @@ extern void Copy32BitsFromTarget(
     const char  *src,
     const int    n);
 
+extern void Double_TargetToHost(
+    ExternalSim   *ES,
+    void          *voidDst,
+    const char    *src,
+    const int     n,
+    const int     dType);
+
+extern void Double_HostToTarget(
+    ExternalSim   *ES,/*lint !e952 Parameter 'ES' could be declared const */
+    char          *dst,
+    const void    * const voidSrc,
+    const int     n,
+    const int     dType);
+
+extern void Generic_TargetToHost(
+    ExternalSim  *ES,
+    void         *dst,
+    const char   * const src,
+    const int    n,
+    const int    dType);
+
+extern void Generic_HostToTarget(
+    ExternalSim   *ES,
+    char          *dst,
+    const void    * const src,
+    const int     n,
+    const int     dType);
+
+extern void Bool_HostToTarget(
+    ExternalSim   *ES,
+    char          *dst,
+    const void    * const voidSrc,
+    const int     n,
+    const int     dType);
+
+extern void Bool_TargetToHost(
+    ExternalSim   *ES,
+    void          *voidDst,
+    const char    *src,
+    const int     n,
+    const int     dType);
+
+extern void Int33Plus_HostToTarget(
+    ExternalSim   *ES,
+    char          *dst,
+    const void    * const src,
+    const int     n,
+    const int     dType);
+
+extern void Int33Plus_TargetToHost(
+    ExternalSim  *ES,
+    void         *dst,
+    const char   * const src,
+    const int    n,
+    const int    dType);
+
 extern void ProcessConnectResponse1(ExternalSim *ES, PktHeader *pktHdr);
 
 extern void ProcessTargetDataSizes(ExternalSim *ES, uint32_T *bufPtr);
