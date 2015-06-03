@@ -17,6 +17,11 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[]);
 void MyExtProcessArgs(ExternalSim *ES, const char hostName[], const int arr[]);
 boolean_T MyExtRecvIncomingPktHeader( ExternalSim *ES, PktHeader   *pktHdr);
 void MyFreeAndNullUserData(ExternalSim *ES);
+int MyExtUtilCreateRtIOStreamArgs(ExternalSim   *ES,
+                        const char hostName[],
+                        const int arr[],
+                        int * argc,
+                        const char * argv[]);
 
 
 #endif /* MAIN_INCL_H_ */

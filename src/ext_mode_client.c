@@ -359,6 +359,44 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 void MyExtProcessArgs(ExternalSim *ES, const char hostName[], const int arr[])
 {
 
+    int argc = 0;
+    const char * argv[ARGC_MAX] = ARGV_INIT;
+    MyUserData  * const userData = (MyUserData *)esGetUserData(ES);
+    int errorOccurred = 0;
+
+    errorOccurred = MyExtUtilCreateRtIOStreamArgs(ES, hostName, arr, &argc, argv);
+
+    if (errorOccurred) {
+       return;
+    }
+
+    assert(argc <= ARGC_MAX);
+
+    {
+        /* Load the rtIOStream shared library */
+        int error;
+        error = ExtUtilLoadSharedLib(&userData->rtiostreamData);
+        if (error != 0) {
+
+            /* Error out immediately */
+//            mexErrMsgIdAndTxt("rtiostream_interface:ExtProcessArgs:"
+//                              "LoadSharedLibFailure",
+//                              "Error loading rtIOStream shared library; "
+//                              "see command window for details.");
+
+        } else {
+
+            /* Call rtIOStreamOpen */
+            userData->rtiostreamData.streamID = ( *(userData->rtiostreamData.libH.openFn) ) (argc, (void *)argv);
+            if (userData->rtiostreamData.streamID == -1) {
+                const char msg[] =
+                    "An error occurred attempting to open an rtIOStream. More detail "
+                    "may be reported in the MATLAB command window\n";
+                esSetError(ES, msg);
+            }
+        }
+    }
+
 }/*end MyExtProcessArgs*/
 
 /*Function: MyFreeAndNullUserData===========================================
@@ -380,6 +418,82 @@ boolean_T MyExtRecvIncomingPktHeader( ExternalSim *ES, PktHeader   *pktHdr)
 {
 	return 0;
 }
+
+
+/*Function: MyExtUtilCreateRTIOStreamArgs
+ * Abstract:
+ * 		adapted from ExtUtilCreateRTIOStreamArgs (ext_util.c)
+ * 		Process arguments required for TCP/IP communications
+ *
+ */
+int MyExtUtilCreateRtIOStreamArgs(ExternalSim   *ES,
+                        const char hostName[],
+                        const int arr[],
+                        int * argc,
+                        const char * argv[])
+{
+
+	   int errorOccurred = 0;
+	   /* initialize connect timeout value, may get overridden by user specified mex file fourth argument */
+	   int connectTimeOutSecs = 120; //DEFAULT_CONNECT_TIMEOUT_SECS =120
+
+	   /* ... Argument 1 - host name */
+	   if(strlen(hostName)>1 ){ /*maybe add error checking for chars*/
+	      /* host name specified */
+	      char * argValue = 0;
+	      //errorOccurred = ExtUtilProcessTCPIPHostArg(ES, arr[0], &argValue);
+	         argv[(*argc)++] = "-hostname";
+	         argv[(*argc)++] = argValue;
+	   }
+	   else{
+		   errorOccurred=1;
+	        return errorOccurred;
+	   }
+
+
+	   /* ... Argument 2 - verbosity */
+	   if( arr[0]==0 || arr[0]==1) {
+	      int argValue = 0;
+	      //errorOccurred = ExtUtilProcessVerboseArg(ES, arr[0], &argValue);
+	      if (errorOccurred) {
+	         return errorOccurred;
+	      }
+	      else {
+	         esSetVerbosity(ES, argValue); /*lint !e734 loss of precision 31 bits to 8 bits*/
+	      }
+	   }
+
+
+	   /* ... Argument 3 - TCP port value */
+	   if(arr[1]>=256 && arr[1]<=65535){
+		   char * argValue = 0;
+	      //errorOccurred = ExtUtilProcessTCPIPPortArg(ES, arr[1], &argValue);
+	      if (errorOccurred) {
+	         return errorOccurred;
+	      }
+	      else {
+	         argv[(*argc)++] = "-port";
+	         argv[(*argc)++] = argValue;
+	      }
+	   }
+	   /* ... Argument 4 - connection timeout */
+	   if(arr[2]<0 ){ //add error checking for real scalar int
+		   errorOccurred=1;
+		   return errorOccurred;
+	       //errorOccurred = ExtUtilProcessConnectTimeoutArg(ES, arr[2], &connectTimeOutSecs);
+	   }
+
+
+
+	   esSetConnectTimeout(ES, connectTimeOutSecs); /*lint !e734 loss of precision 31 bits to 8 bits*/
+
+	   /* ... Argument 5 - open rtIOStream as TCP/IP client */
+	   argv[(*argc)++] = "-client";
+	   argv[(*argc)++] = "1";
+
+	   return errorOccurred;
+
+}/*end MyExtUtilCreateRTIOStreamArgs*/
 
 /* Function: main =======================================================
  * Abstract:
