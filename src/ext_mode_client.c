@@ -82,10 +82,8 @@ ExternalSim* ExtSimStructDef(FILE* fIn )
 	esSetBoolTargetToHostFcn(es, Bool_TargetToHost);
 	esSetBoolHostToTargetFcn(es, Bool_HostToTarget);
 
-
 	//esSetSizeOfTargetDataTypeFcn(es, fcn);
 	//esSetSizeOfDataTypeFcn(es, fcn);
-
 
 	return es;
 }
@@ -145,6 +143,7 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 	    if (!esIsErrorClear(ES)) {
 	        const char errMsgHeader[] = "Failed to connect to the target. Possible reasons for the failure:";
 	        sprintf(failedToConnectErrMsg, "%s\n %s\n Caused by:\n %s", errMsgHeader, failedToConnectCauses, esGetError(ES));
+	        fflush(stdout);
 	        esSetError(ES, failedToConnectErrMsg);
 	        goto EXIT_POINT;
 	   }
@@ -182,6 +181,7 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 	        const char errMsgHeader[] = "Failed to connect to the target. A time-out occurred while "
 	                "waiting for the first connect response packet. Possible reasons for the time-out:";
 	        sprintf(failedToConnectErrMsg, "%s\n%s", errMsgHeader, failedToConnectCauses);
+	       fflush(stdout);
 	        esSetError(ES, failedToConnectErrMsg);
 	        goto EXIT_POINT;
 	      }
@@ -197,11 +197,13 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 	           MachByteOrder hostEndian =
 	                (*((int8_T *) &one) == 1) ? LittleEndian : BigEndian;
 
-	          printf("host endian mode:\t%s\n",
+	          printf("\nhost endian mode:\t%s\n",
 	      	  (hostEndian == LittleEndian) ? "Little":"Big");
+	          fflush(stdout);
 
-	          printf("byte swapping required:\t%s\n",
+	          printf("\nbyte swapping required:\t%s\n",
 	             (esGetSwapBytes(ES)) ? "true":"false");
+	          fflush(stdout);
 	        }
 
 	        /*
@@ -317,16 +319,18 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 	                if (esGetIntOnly(ES)) InstallIntegerOnlyDoubleConversionRoutines(ES);
 
 	                if (esGetVerbosity(ES)) {
-	                    printf("target integer only code:\t%s\n",
+	                    printf("\ntarget integer only code:\t%s\n",
 	                              (esGetIntOnly(ES)) ? "true":"false");
+	      	          fflush(stdout);
 	                }
 
 	                /* process multiword data type chunk size */
 	                esSetTargetMWChunkSize(ES, *bufPtr++);
 
 	                if (esGetVerbosity(ES)) {
-	                    printf("target multiword chunk size:\t%d bytes\n",
+	                    printf("\ntarget multiword chunk size:\t%d bytes\n",
 	                              (esGetTargetMWChunkSize(ES)));
+	      	          fflush(stdout);
 	                }
 
 	                /* process target status */
@@ -416,7 +420,78 @@ void MyFreeAndNullUserData(ExternalSim *ES)
  */
 boolean_T MyExtRecvIncomingPktHeader( ExternalSim *ES, PktHeader   *pktHdr)
 {
-	return 0;
+    char      *bufPtr;
+    int       nBytes     = 0;    /* total pkt header bytes recv'd. */
+    int       nGot       = 0;    /* num bytes recv'd in one call to ExtGetTargetPkt. */
+    int       noDataCntr = 1000; /* determines if target exited unexpectedly. */
+    boolean_T error      = EXT_NO_ERROR;
+
+    /*
+     * Loop until all bytes are received for the incoming packet header.
+     * The packet header may not be read in one shot.
+     */
+    while (nBytes != sizeof(PktHeader)) {
+        /*
+         * Assume true since we should only be here after a call to
+         * ExtTargetPktPending() returned true
+         */
+        boolean_T pending = 1; //true
+
+        /*
+         * We may have received some of the packet header, but not all of
+         * it.  Check to see if any additional data is pending to complete
+         * the packet header.
+         */
+        if (nBytes > 0) {
+            error = ExtTargetPktPending(ES, &pending, 0, 100000);
+            if (error) {
+                esSetError(ES,
+                           "ExtTargetPktPending() call failed while checking "
+                           " for target pkt\n");
+                goto EXIT_POINT;
+            }
+        }
+
+        /*
+         * Get any pending data
+         */
+        if (pending) {
+            bufPtr = (char_T *)pktHdr + nBytes;
+            error = ExtGetTargetPkt(ES,sizeof(PktHeader)-nBytes,&nGot,bufPtr);
+            if (error) {
+                esSetError(ES,
+                           "ExtGetTargetPkt() call failed while checking "
+                           " target pkt header.\n");
+                goto EXIT_POINT;
+            }
+            nBytes += nGot;
+        }
+
+        /*
+         * ExtRecvIncomingPktHeader() is called only after a call to
+         * ExtTargetPktPending() returns true.  For tcp/ip, this function
+         * may return true if the tcp/ip communication was shut down by
+         * the target unexpectedly (e.g. someone did a ctrl-c to stop
+         * the target executable while connected via extmode).  If
+         * ExtTargetPktPending() returns true but we do not see any data
+         * after checking the communication line some number of times,
+         * we must break out of this infinite loop or Matlab will hang.
+         */
+        if (nGot == 0) {
+            noDataCntr--;
+            if (noDataCntr == 0) {
+                error = 1;
+                esSetError(ES,
+                           "ExtGetTargetPkt() call failed while checking "
+                           " target pkt header.\n");
+                goto EXIT_POINT;
+            }
+        }
+    }
+
+EXIT_POINT:
+    return error;
+
 }
 
 
@@ -495,6 +570,7 @@ int MyExtUtilCreateRtIOStreamArgs(ExternalSim   *ES,
 
 }/*end MyExtUtilCreateRTIOStreamArgs*/
 
+
 /* Function: main =======================================================
  * Abstract:
  *    Main entry point for external communications processing.
@@ -546,7 +622,7 @@ int main(void) {
 	         */
 	        //esSetMexFuncGateWayFcn(ES,main);
 	    } else {
-		printf("This external mex file is used by Simulink in external "
+		printf("\nThis external mex file is used by Simulink in external "
 			  "mode\nfor communicating with Code Generation targets "
 			  "using interprocess communications.\n");
 		fflush(stdout);
@@ -566,7 +642,7 @@ int main(void) {
 	        /* Connect to target. */
 	        MyExtConnect(ES, name, arr);
 	        if (esGetVerbosity(ES)) {
-	        	printf("action: EXT_CONNECT\n");
+	        	printf("\naction: EXT_CONNECT\n");
 	        	fflush(stdout);
 	        }
 	        break;
