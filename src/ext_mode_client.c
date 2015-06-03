@@ -15,9 +15,9 @@
 #include "extutil.h"
 #include "main_incl.h"
 #include "matrix.h"
-
 #include "ext_convert.h"
-//#include "ext_comm.c"
+
+#include "ext_comm.c"
 
 /*Function: ExtSimStructDef====================================================
  * Abstract:
@@ -587,18 +587,52 @@ int MyExtUtilCreateRtIOStreamArgs(ExternalSim   *ES,
  */
 int main(void) {
 
+	printf("---Starting main---");
+	fflush(stdout);
+
 	ExternalSim  *ES;	/*Pointer to ExternalSim struct, to pass as args*/
 
 	int nlhs=-1;	/*Default value to initialize ES*/
 	int arr[3];	/*Argument for MyExtConnect*/
 	char name[]="HostName"; /*Host name to be passed to MyExtConnect*/
+	int ndim=1, dims[]={1};
 
 	FILE *rtwPtr;
 	const char *fileName="test.txt"; //will of course have to be dynamic
-
 	rtwPtr= fopen(fileName, "r");
 
+	/*For mxArray*/
+	mxChar *orig_ptr, *ptr;
+	char *data_ptr;
+	int i;
+	int *verbos;//=1;
+	int *tcp_port;//=17725;
+	int *timeout;//=120;
 
+	verbos=mxCalloc(1, sizeof(int));
+	tcp_port=mxCalloc(1, sizeof(int));
+	timeout=mxCalloc(1, sizeof(int));
+
+
+	mxArray *prhs[4];
+
+	prhs[0]=mxCreateCharArray(ndim, dims);
+	orig_ptr=(mxChar *)mxGetPr(prhs[0]);
+
+	for(i=0; i<strlen(name); i++){
+		ptr=orig_ptr+i;
+		data_ptr=name[i];
+	}
+
+	prhs[1]=mxCreateNumericArray(ndim, dims, mxINT8_CLASS, mxREAL);
+	prhs[2]=mxCreateNumericArray(ndim, dims, mxINT32_CLASS, mxREAL);
+	prhs[3]=mxCreateNumericArray(ndim, dims, mxINT32_CLASS, mxREAL);
+
+	mxSetData(prhs[1], verbos); //set data being problematic....
+	mxSetData(prhs[2], tcp_port);
+	mxSetData(prhs[3], timeout);
+	printf("---here 2---");
+			fflush(stdout);
 
 	if(rtwPtr==NULL)
 	{
@@ -654,7 +688,7 @@ int main(void) {
 	        /* Connect to target. */
 	    	printf("\n---EXT_CONNECT---");
 	    	fflush(stdout);
-	        MyExtConnect(ES, name, arr);
+	        ExtConnect(ES, name, arr);
 	        if (esGetVerbosity(ES)) {
 	        	printf("\naction: EXT_CONNECT\n");
 	        	fflush(stdout);

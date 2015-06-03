@@ -4,18 +4,21 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../src/ext_comm.c \
 ../src/ext_convert.c \
 ../src/ext_mode_client.c \
 ../src/ext_util.c \
 ../src/rtiostream_interface.c 
 
 OBJS += \
+./src/ext_comm.o \
 ./src/ext_convert.o \
 ./src/ext_mode_client.o \
 ./src/ext_util.o \
 ./src/rtiostream_interface.o 
 
 C_DEPS += \
+./src/ext_comm.d \
 ./src/ext_convert.d \
 ./src/ext_mode_client.d \
 ./src/ext_util.d \
