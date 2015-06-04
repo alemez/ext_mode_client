@@ -17,6 +17,7 @@
 #include "matrix.h"
 #include "ext_convert.h"
 #include "rtiostream_loadlib.h"
+#include "rtiostream.h"
 
 #include "ext_comm.c"
 
@@ -25,6 +26,7 @@
  * 		Assigns data found in the file fIn to the appropriate fields in the
  * 		External Sim struct.
  * 		Hardcoded
+ * 		Unnecessary?
  */
 ExternalSim* ExtSimStructDef(FILE* fIn )
 {
@@ -402,6 +404,8 @@ void MyExtProcessArgs(ExternalSim *ES, const char hostName[], const int arr[])
         } else {
         	/* Call rtIOStreamOpen */
             userData->rtiostreamData.streamID = ( *(userData->rtiostreamData.libH.openFn) ) (argc, (void *)argv);
+            //stuck here^^
+
             printf("\nrtiostreamData: %d", userData->rtiostreamData.streamID);
             	    fflush(stdout);
             if (userData->rtiostreamData.streamID == -1) {

@@ -29,6 +29,7 @@
 #include "rtiostream.h"
 #include "tmwtypes.h"
 
+
 #ifdef _WIN32
   /* WINDOWS */
 
@@ -1330,6 +1331,9 @@ static int processArgs(
     int           * udpSendBufSize,
     int           * udpRecvBufSize)
 {
+
+	printf("\n---processArgs rtiostream_tcpip.c---");
+	fflush(stdout);
     int        retVal    = RTIOSTREAM_NO_ERROR;
     int        count           = 0;
 
@@ -1612,6 +1616,9 @@ static int waitForClientClose(ConnectionData * connection) {
  */
 int rtIOStreamOpen(int argc, void * argv[])
 {
+	printf("rtIOStreamOpen");
+	fflush(stdout);
+
     char               *xHostName = NULL; /* default */
     char               *serverInfoFile = NULL; /* default */
     unsigned int        xPortNum     = (SERVER_PORT_NUM); /* default */
@@ -1634,7 +1641,8 @@ int rtIOStreamOpen(int argc, void * argv[])
        result = RTIOSTREAM_ERROR;
        return result;
     }
-
+    printf("\nhi1");
+    	fflush(stdout);
     result = processArgs(argc, argv, 
                          &xHostName, 
                          &xPortNum, 
@@ -1648,7 +1656,8 @@ int rtIOStreamOpen(int argc, void * argv[])
                          &isUsingSeqNum,
                          &udpSendBufSize,
                          &udpRecvBufSize);
-
+    printf("\nhi2");
+    	fflush(stdout);
     if (result == RTIOSTREAM_ERROR) {
        return result;
     }
@@ -1739,7 +1748,8 @@ int rtIOStreamOpen(int argc, void * argv[])
           close(sock);
        }
     }
-    return result;
+
+    return result;;
 }
 
 /* Function: rtIOStreamSend =====================================================
