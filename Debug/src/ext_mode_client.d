@@ -9,6 +9,7 @@ src/ext_mode_client.d: ../src/ext_mode_client.c \
  /home/control/workspace/ext_mode_client/incl/rtiostream_loadlib.h \
  /home/control/workspace/ext_mode_client/incl/main_incl.h \
  /home/control/workspace/ext_mode_client/incl/ext_convert.h \
+ /home/control/workspace/ext_mode_client/incl/rtiostream_loadlib.h \
  ../src/ext_comm.c /home/control/workspace/ext_mode_client/incl/extsim.h \
  /home/control/workspace/ext_mode_client/incl/ext_transport.h \
  /home/control/workspace/ext_mode_client/incl/ext_share.h
@@ -32,6 +33,8 @@ src/ext_mode_client.d: ../src/ext_mode_client.c \
 /home/control/workspace/ext_mode_client/incl/main_incl.h:
 
 /home/control/workspace/ext_mode_client/incl/ext_convert.h:
+
+/home/control/workspace/ext_mode_client/incl/rtiostream_loadlib.h:
 
 ../src/ext_comm.c:
 

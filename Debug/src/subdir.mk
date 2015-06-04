@@ -8,21 +8,24 @@ C_SRCS += \
 ../src/ext_convert.c \
 ../src/ext_mode_client.c \
 ../src/ext_util.c \
-../src/rtiostream_interface.c 
+../src/rtiostream_interface.c \
+../src/rtiostream_tcpip.c 
 
 OBJS += \
 ./src/ext_comm.o \
 ./src/ext_convert.o \
 ./src/ext_mode_client.o \
 ./src/ext_util.o \
-./src/rtiostream_interface.o 
+./src/rtiostream_interface.o \
+./src/rtiostream_tcpip.o 
 
 C_DEPS += \
 ./src/ext_comm.d \
 ./src/ext_convert.d \
 ./src/ext_mode_client.d \
 ./src/ext_util.d \
-./src/rtiostream_interface.d 
+./src/rtiostream_interface.d \
+./src/rtiostream_tcpip.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

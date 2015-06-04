@@ -16,6 +16,7 @@
 #include "main_incl.h"
 #include "matrix.h"
 #include "ext_convert.h"
+#include "rtiostream_loadlib.h"
 
 #include "ext_comm.c"
 
@@ -45,7 +46,8 @@ ExternalSim* ExtSimStructDef(FILE* fIn )
 	esSetAction(es, EXT_CONNECT);
 	esSetVerbosity(es, 1);	/*Verbose build chosen*/
 	esSetConnectTimeout(es, 120); /*DEFAULT_CONNECT_TIMEOUT_SECS*/
-	//esSetError(es, '\0');
+	//esSetError(es, 0);
+
 	//esSetUserData(es, val); /*pointer*/
 	//esSetCommBuf(es, val);	/*pointer*/
 	//esSetCommBufSize(es, val);	/* size of communication buffer - in host bytes */
@@ -130,7 +132,7 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 	fflush(stdout);
 
 	    {
-	        MyUserData *userData = ExtUserDataCreate();
+	        UserData *userData = ExtUserDataCreate();
 	        if (userData == NULL) {
 	            esSetError(ES, "Memory allocation error.");
 	            goto EXIT_POINT;
@@ -373,7 +375,7 @@ void MyExtProcessArgs(ExternalSim *ES, const char hostName[], const int arr[])
 	fflush(stdout);
     int argc = 0;
     const char * argv[ARGC_MAX] = ARGV_INIT;
-    MyUserData  * const userData = (MyUserData *)esGetUserData(ES);
+    UserData  * const userData = (UserData *)esGetUserData(ES);
     int errorOccurred = 0;
 
     errorOccurred = MyExtUtilCreateRtIOStreamArgs(ES, hostName, arr, &argc, argv);
@@ -398,11 +400,9 @@ void MyExtProcessArgs(ExternalSim *ES, const char hostName[], const int arr[])
 //                              "see command window for details.");
 
         } else {
-        	printf("\n---1---");
-        		    fflush(stdout);
-            /* Call rtIOStreamOpen */
+        	/* Call rtIOStreamOpen */
             userData->rtiostreamData.streamID = ( *(userData->rtiostreamData.libH.openFn) ) (argc, (void *)argv);
-            printf("\n---2---");
+            printf("\nrtiostreamData: %d", userData->rtiostreamData.streamID);
             	    fflush(stdout);
             if (userData->rtiostreamData.streamID == -1) {
                 const char msg[] =
@@ -601,7 +601,9 @@ int main(void) {
 	const char *fileName="test.txt"; //will of course have to be dynamic
 	rtwPtr= fopen(fileName, "r");
 
+#ifdef MX
 	/*For mxArray*/
+	mxArray *prhs[4];
 	mxChar *orig_ptr, *ptr;
 	char *data_ptr;
 	int i;
@@ -613,10 +615,12 @@ int main(void) {
 	tcp_port=mxCalloc(1, sizeof(int));
 	timeout=mxCalloc(1, sizeof(int));
 
-
-	mxArray *prhs[4];
+	verbos[0]=1;
+	tcp_port[0]=17725;
+	timeout[0]=120;
 
 	prhs[0]=mxCreateCharArray(ndim, dims);
+
 	orig_ptr=(mxChar *)mxGetPr(prhs[0]);
 
 	for(i=0; i<strlen(name); i++){
@@ -633,6 +637,7 @@ int main(void) {
 	mxSetData(prhs[3], timeout);
 	printf("---here 2---");
 			fflush(stdout);
+#endif
 
 	if(rtwPtr==NULL)
 	{
@@ -688,7 +693,7 @@ int main(void) {
 	        /* Connect to target. */
 	    	printf("\n---EXT_CONNECT---");
 	    	fflush(stdout);
-	        ExtConnect(ES, name, arr);
+	        MyExtConnect(ES, name, arr);
 	        if (esGetVerbosity(ES)) {
 	        	printf("\naction: EXT_CONNECT\n");
 	        	fflush(stdout);
