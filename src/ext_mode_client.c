@@ -136,6 +136,8 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 	    {
 	        UserData *userData = ExtUserDataCreate();
 	        if (userData == NULL) {
+	        	printf("\nMemory allocation error");
+	        	fflush(stdout);
 	            esSetError(ES, "Memory allocation error.");
 	            goto EXIT_POINT;
 	        }
@@ -151,6 +153,8 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 	    MyExtProcessArgs(ES,hostName,arr);
 
 	    if (!esIsErrorClear(ES)) {
+	    	printf("\nFailed to connect to target");
+	    	fflush(stdout);
 	        const char errMsgHeader[] = "Failed to connect to the target. Possible reasons for the failure:";
 	        sprintf(failedToConnectErrMsg, "%s\n %s\n Caused by:\n %s", errMsgHeader, failedToConnectCauses, esGetError(ES));
 	        fflush(stdout);
@@ -163,7 +167,10 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 	    timeOutSecs  =  (long int) esGetConnectTimeout(ES);
 
 	    ExtOpenConnection(ES);
-	    if (!esIsErrorClear(ES)) goto EXIT_POINT;
+	    if (!esIsErrorClear(ES)){
+	    	printf("\ngoing to exit point");
+	    	goto EXIT_POINT;
+	    }
 
 	    /*
 	     * Send the EXT_CONNECT pkt to the target.  This packet consists
@@ -173,6 +180,8 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 	    (void)memcpy((void *)&pktHdr,"ext-mode",8);
 	    error = ExtSetTargetPkt(ES,sizeof(pktHdr),(char *)&pktHdr,&nSet);
 	    if (error || (nSet != sizeof(pktHdr))) {
+	    	printf("\nCall to ExtSetTargetPkt() failed on EXT_CONNECT");
+	    	fflush(stdout);
 	        esSetError(ES, "ExtSetTargetPkt() call failed on EXT_CONNECT.\n"
 	                "Ensure target is still running\n");
 	        goto EXIT_POINT;
@@ -359,9 +368,12 @@ void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[])
 
 	    EXIT_POINT:
 	       if (!esIsErrorClear(ES)) {
+	    	   printf("\nHas errors");
 	            ExtCloseConnection(ES);
 	            MyFreeAndNullUserData(ES);
 	        }
+
+	       printf("\n---!!!Exit from MyExtComm!!!---");
 }/*End MyExtComm */
 
 
@@ -403,12 +415,14 @@ void MyExtProcessArgs(ExternalSim *ES, const char hostName[], const int arr[])
 
         } else {
         	/* Call rtIOStreamOpen */
-            userData->rtiostreamData.streamID = ( *(userData->rtiostreamData.libH.openFn) ) (argc, (void *)argv);
-            //stuck here^^
+            userData->rtiostreamData.streamID = rtIOStreamOpen(argc, (void *)argv);//( *(userData->rtiostreamData.libH.openFn) ) (argc, (void *)argv);
+
 
             printf("\nrtiostreamData: %d", userData->rtiostreamData.streamID);
             	    fflush(stdout);
             if (userData->rtiostreamData.streamID == -1) {
+            	fprintf(stderr, "An error occurred attempting to open an rtIOStream");
+            	fflush(stdout);
                 const char msg[] =
                     "An error occurred attempting to open an rtIOStream. More detail "
                     "may be reported in the MATLAB command window\n";
@@ -533,6 +547,7 @@ int MyExtUtilCreateRtIOStreamArgs(ExternalSim   *ES,
 	      /* host name specified */
 	      char * argValue = 0;
 	      //errorOccurred = ExtUtilProcessTCPIPHostArg(ES, arr[0], &argValue);
+
 	         argv[(*argc)++] = "-hostname";
 	         argv[(*argc)++] = argValue;
 	   }
@@ -558,6 +573,7 @@ int MyExtUtilCreateRtIOStreamArgs(ExternalSim   *ES,
 	   if(arr[1]>=256 && arr[1]<=65535){
 		   char * argValue = 0;
 	      //errorOccurred = ExtUtilProcessTCPIPPortArg(ES, arr[1], &argValue);
+
 	         argv[(*argc)++] = "-port";
 	         argv[(*argc)++] = argValue;
 	   }
@@ -608,8 +624,6 @@ int main(void) {
 #ifdef MX
 	/*For mxArray*/
 	mxArray *prhs[4];
-	mxChar *orig_ptr, *ptr;
-	char *data_ptr;
 	int i;
 	int *verbos;//=1;
 	int *tcp_port;//=17725;
@@ -625,12 +639,7 @@ int main(void) {
 
 	prhs[0]=mxCreateCharArray(ndim, dims);
 
-	orig_ptr=(mxChar *)mxGetPr(prhs[0]);
 
-	for(i=0; i<strlen(name); i++){
-		ptr=orig_ptr+i;
-		data_ptr=name[i];
-	}
 
 	prhs[1]=mxCreateNumericArray(ndim, dims, mxINT8_CLASS, mxREAL);
 	prhs[2]=mxCreateNumericArray(ndim, dims, mxINT32_CLASS, mxREAL);
@@ -688,15 +697,11 @@ int main(void) {
 	arr[1]=17725; //TCP port value
 	arr[2]=esGetConnectTimeout(ES);
 
-	printf("\n---Switch case:---");
-    fflush(stdout);
 
 	switch(esGetAction(ES)) {
 
 	    case EXT_CONNECT:
 	        /* Connect to target. */
-	    	printf("\n---EXT_CONNECT---");
-	    	fflush(stdout);
 	        MyExtConnect(ES, name, arr);
 	        if (esGetVerbosity(ES)) {
 	        	printf("\naction: EXT_CONNECT\n");

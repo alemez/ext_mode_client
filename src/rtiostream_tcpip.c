@@ -1337,6 +1337,7 @@ static int processArgs(
     int        retVal    = RTIOSTREAM_NO_ERROR;
     int        count           = 0;
 
+
     while(count < argc) {
         const char *option = (char *)argv[count];
         count++;
@@ -1351,26 +1352,28 @@ static int processArgs(
                 argv[count-1] = NULL;
 
             } else if ((strcmp(option, "-port") == 0) && (count != argc)) {
+
                 char       tmpstr[2];
                 int itemsConverted;
                 const char *portStr = (char *)argv[count];
 
                 count++;     
-                
-                itemsConverted = sscanf(portStr,"%d%1s", (int *) portNum, tmpstr);
+
+                itemsConverted = 1;//sscanf(portStr,"%d%1s", (int *) portNum, tmpstr);
+
                 if ( (itemsConverted != 1) || 
                      ( ((*portNum != 0) && (*portNum < 255)) || (*portNum > 65535)) 
-                    ) {
+                    ) {printf("\nRTIOSTREAM ERROR ");
+                	fflush(stdout);
                     
                     retVal = RTIOSTREAM_ERROR;
                 } else {
-
                     argv[count-2] = NULL;
                     argv[count-1] = NULL;
-                }           
+                }
                 
             } else if ((strcmp(option, "-client") == 0) && (count != argc)) {
-                
+
                 *isClient = ( strcmp( (char *)argv[count], "1") == 0 );
 
                 count++;
@@ -1491,6 +1494,7 @@ static int processArgs(
             }
         }
     }
+
     return retVal;
 }
 
@@ -1518,7 +1522,9 @@ static SOCKET clientOpenSocket(char * hostName, unsigned int portNum, CommsProto
          * Create the sockets & make connections.
          */
         if (protocol == TCP_PROTOCOL) {
+        	printf("\nTCP_PROTOCOL");
            cSock = socket(PF_INET,SOCK_STREAM,0);
+
         } 
         else {
            cSock = socket(PF_INET,SOCK_DGRAM,0);
@@ -1533,6 +1539,7 @@ static SOCKET clientOpenSocket(char * hostName, unsigned int portNum, CommsProto
  
     if (protocol == UDP_PROTOCOL)
     {
+    	printf("\nUDP protocol");
         if (errStatus!=RTIOSTREAM_ERROR)
         {
             /* increase the UDP socket send size to increase the 
@@ -1562,12 +1569,14 @@ static SOCKET clientOpenSocket(char * hostName, unsigned int portNum, CommsProto
     if (errStatus!=RTIOSTREAM_ERROR) {
         if (connect(cSock, (struct sockaddr *)&sa, sizeof(sa)) == SOCK_ERR) {
             char tmp[1024];
-
+            printf("\nAttempting to establish connection with hostname '%s' "
+            		"through port %d", hostName, ntohs(sa.sin_port));
             sprintf(tmp,
                     "Attempting to establish connection with hostname '%s' "
                     "through port %d.\n", 
                     hostName,
                     ntohs(sa.sin_port));
+            fflush(stdout);
             cSock = INVALID_SOCKET;
             printf("%s",tmp);
         } 
@@ -1616,7 +1625,7 @@ static int waitForClientClose(ConnectionData * connection) {
  */
 int rtIOStreamOpen(int argc, void * argv[])
 {
-	printf("rtIOStreamOpen");
+	printf("\nrtIOStreamOpen");
 	fflush(stdout);
 
     char               *xHostName = NULL; /* default */
@@ -1641,8 +1650,7 @@ int rtIOStreamOpen(int argc, void * argv[])
        result = RTIOSTREAM_ERROR;
        return result;
     }
-    printf("\nhi1");
-    	fflush(stdout);
+
     result = processArgs(argc, argv, 
                          &xHostName, 
                          &xPortNum, 
@@ -1656,8 +1664,7 @@ int rtIOStreamOpen(int argc, void * argv[])
                          &isUsingSeqNum,
                          &udpSendBufSize,
                          &udpRecvBufSize);
-    printf("\nhi2");
-    	fflush(stdout);
+
     if (result == RTIOSTREAM_ERROR) {
        return result;
     }
@@ -1706,6 +1713,7 @@ int rtIOStreamOpen(int argc, void * argv[])
 #if (!defined(VXWORKS)) /* Client side connection not supported on VxWorks */
            sock = clientOpenSocket(xHostName, xPortNum, protocol,udpSendBufSize,udpRecvBufSize);
            if (sock == INVALID_SOCKET) {
+        	   printf("\nInvalid Socket");
               result = RTIOSTREAM_ERROR;
            }
 #endif
@@ -1749,7 +1757,7 @@ int rtIOStreamOpen(int argc, void * argv[])
        }
     }
 
-    return result;;
+    return result;
 }
 
 /* Function: rtIOStreamSend =====================================================

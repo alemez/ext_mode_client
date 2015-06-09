@@ -246,7 +246,7 @@ PUBLIC boolean_T ExtSetTargetPkt(
     const int sendTimeOutSecs = 120;
     #endif
     int timeoutOccurred = 0;
-	
+
     *nBytesSet = 0;  /* assume */
     retVal = rtIOStreamLibBlockingSend( &(userData->rtiostreamData.libH) ,
                                     userData->rtiostreamData.streamID,
@@ -254,7 +254,9 @@ PUBLIC boolean_T ExtSetTargetPkt(
                                     (size_t) nBytesToSet,
                                     sendTimeOutSecs, 
                                     &timeoutOccurred);
+
     if (retVal) {
+    	printf("\nEXT_ERROR");
         errorCode = EXT_ERROR;
         return errorCode;
     }
