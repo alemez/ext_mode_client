@@ -190,8 +190,8 @@ struct ExternalSim_tag {
     } DTypeFcn;
 
     /* "shortcut" for calling mexfile */
-   // MexFuncGateWayFcn mexFunc;
-   // Mfh_MATLAB_fn *   mexFuncHandle;
+    MexFuncGateWayFcn mexFunc;
+    Mfh_MATLAB_fn *   mexFuncHandle;
 };
 
 
