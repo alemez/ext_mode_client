@@ -620,6 +620,8 @@ PRIVATE void ExtSendGenericPkt(
      */
     error = ExtSetTargetPkt(ES,sizeof(pktHdr),(char *)&pktHdr,&nSet);
     if (error || (nSet != sizeof(pktHdr))) {
+    	printf("\nExtSetTargetPkt() call failed for ExtSendGenericPkt()");
+    	fflush(stdout);
         esSetError(ES,"ExtSetTargetPkt() call failed for ExtSendGenericPkt().\n"
 	              "Ensure target is still running\n");
         goto EXIT_POINT;
@@ -631,13 +633,16 @@ PRIVATE void ExtSendGenericPkt(
     if (pktSize > 0) {
         error = ExtSetTargetPkt(ES,pktSize,esGetCommBuf(ES),&nSet);
         if (error || (nSet != pktSize)) {
+        	printf("\nExtSetTargetPkt() call failed for ExtSendGenericPkt()");
+        	fflush(stdout);
             esSetError(ES,
                 "ExtSetTargetPkt() call failed for ExtSendGenericPkt().\n"
 	        "Ensure target is still running\n");
             goto EXIT_POINT;
         }
     }
-
+printf("\nend");
+fflush(stdout);
 EXIT_POINT:
     return;
 } /* end ExtSendGenericPkt */
