@@ -29,7 +29,7 @@ all: ext_mode_client
 ext_mode_client: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	gcc -L/opt/MATLAB/R2014b/bin/glnxa64 -Wl,-rpath=/opt/MATLAB/R2014b/bin/glnxa64 -o "ext_mode_client" $(OBJS) $(USER_OBJS) $(LIBS)
+	gcc -lpthread -L/opt/MATLAB/R2014b/bin/glnxa64 -Wl,-rpath=/opt/MATLAB/R2014b/bin/glnxa64 -o "ext_mode_client" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

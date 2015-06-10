@@ -11,6 +11,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <pthread.h>
+#include <sched.h>
+#include <unistd.h>
+#include <stdint.h>
+
 #include "extsim.h"
 #include "extutil.h"
 #include "main_incl.h"
@@ -20,6 +25,119 @@
 #include "rtiostream.h"
 
 #include "ext_comm.c"
+
+
+#define MAX_PRIO  (sched_get_priority_min(SCHED_FIFO) + 1)
+pthread_t statemachine_thread;
+
+void* statemachine(void *es)
+{
+	short cur_state = 0;
+	int_T  nrhs;	/*Simply as argument filler. Unused*/
+	const mxArray  *prhs[1]; 	/*Simply as argument filler. Unused*/
+	ExternalSim * ES= (ExternalSim *) es;
+
+	while (cur_state!=-1) {
+		printf("\nPlease enter a state [0..15] or -1 to quit");
+		fflush(stdout);
+		scanf("%hd", &cur_state);
+
+		switch (cur_state){
+		case 0 :
+			printf("State 0 (EXT_CONNECT) will be processed\n");
+			esSetAction(ES, EXT_CONNECT);
+			esSetConnectionStatus(ES, EXTMODE_CONNECTED);
+			ExtConnect(ES, nrhs, prhs);
+			if (esGetVerbosity(ES)) {
+				printf("\naction: EXT_CONNECT\n");
+				fflush(stdout);
+			}
+			break;
+		case 1 :
+			printf("State 1 (EXT_DISCONNECT_REQUEST) will be processed\n");
+			esSetAction(ES, EXT_DISCONNECT_REQUEST);
+			esSetConnectionStatus(ES, EXTMODE_DISCONNECT_REQUESTED);
+            ExtDisconnectRequest(ES, nrhs, prhs);
+			break;
+		case 2 :
+			printf("State 2 (EXT_DISCONNECT_REQUEST_NO_FINAL_UPLOAD) will be processed\n");
+			esSetAction(ES, EXT_DISCONNECT_REQUEST_NO_FINAL_UPLOAD);
+			esSetConnectionStatus(ES, EXTMODE_DISCONNECT_REQUESTED_NO_FINAL_UPLOAD);
+            ExtDisconnectRequestNoFinalUpload(ES, nrhs, prhs);
+			break;
+		case 3 :
+			printf("State 3 (EXT_DISCONNECT_CONFIRMED) will be processed\n");
+			esSetAction(ES, EXT_DISCONNECT_CONFIRMED);
+			esSetConnectionStatus(ES, EXTMODE_DISCONNECT_CONFIRMED );
+            ExtDisconnectConfirmed(ES, nrhs, prhs);
+			break;
+		case 4 :
+			printf("State 4 (EXT_SETPARAM) will be processed\n");
+			esSetAction(ES, EXT_SETPARAM);
+            ExtSendGenericPkt(ES, nrhs, prhs);
+			break;
+		case 5 :
+			printf("State 5 (EXT_GETPARAMS) will be processed\n");
+			esSetAction(ES, EXT_GETPARAMS);
+            ExtSendGenericPkt(ES, nrhs, prhs);
+			break;
+		case 6 :
+			printf("State 6 (EXT_SELECT_SIGNALS) will be processed\n");
+			esSetAction(ES, EXT_SELECT_SIGNALS);
+            ExtSendGenericPkt(ES, nrhs, prhs);
+			break;
+		case 7 :
+			printf("State 7 (EXT_SELECT_TRIGGER) will be processed\n");
+			esSetAction(ES, EXT_SELECT_TRIGGER);
+            ExtSendGenericPkt(ES, nrhs, prhs);
+			break;
+		case 8 :
+			printf("State 8 (EXT_ARM_TRIGGER) will be processed\n");
+			esSetAction(ES, EXT_ARM_TRIGGER);
+            ExtSendGenericPkt(ES, nrhs, prhs);
+			break;
+		case 9 :
+			printf("State 9 (EXT_CANCEL_LOGGING) will be processed\n");
+			esSetAction(ES, EXT_CANCEL_LOGGING);
+            ExtSendGenericPkt(ES, nrhs, prhs);
+			break;
+		case 10 :
+			printf("State 10(EXT_MODEL_START) will be processed\n");
+			esSetAction(ES, EXT_MODEL_START);
+            ExtSendGenericPkt(ES, nrhs, prhs);
+			break;
+		case 11 :
+			printf("State 11 (EXT_MODEL_STOP) will be processed\n");
+			esSetAction(ES, EXT_MODEL_STOP);
+            ExtSendGenericPkt(ES, nrhs, prhs);
+			break;
+		case 12 :
+			printf("State 12 (EXT_MODEL_PAUSE) will be processed\n");
+			esSetAction(ES, EXT_MODEL_PAUSE);
+            ExtSendGenericPkt(ES, nrhs, prhs);
+			break;
+		case 13 :
+			printf("State 13 (EXT_MODEL_STEP) will be processed\n");
+			esSetAction(ES, EXT_MODEL_STEP);
+            ExtSendGenericPkt(ES, nrhs, prhs);
+			break;
+		case 14 :
+			printf("State 14 (EXT_MODEL_CONTINUE) will be processed\n");
+			esSetAction(ES, EXT_MODEL_CONTINUE);
+            ExtSendGenericPkt(ES, nrhs, prhs);
+			break;
+		case 15 :
+			printf("State 15 (EXT_GET_TIME) will be processed\n");
+			esSetAction(ES, EXT_GET_TIME);
+            ExtSendGenericPkt(ES, nrhs, prhs);
+			break;
+		}
+
+	}
+	pthread_exit(0);
+	return 0;
+}
+
 
 /*Function: ExtSimStructDef====================================================
  * Abstract:
@@ -46,8 +164,8 @@ ExternalSim* ExtSimStructDef(FILE* fIn )
 	esSetTargetModelCheckSum(es, 2, 1218549062U);
 	esSetTargetModelCheckSum(es, 3, 3708142253U);
 
-	esSetAction(es, EXT_DISCONNECT_REQUEST);
-	esSetConnectionStatus(es, EXTMODE_DISCONNECT_REQUESTED);
+	esSetAction(es, EXT_CONNECT);
+	esSetConnectionStatus(es, EXTMODE_CONNECTED);
 
 	esSetVerbosity(es, 1);	/*Verbose build chosen*/
 	esSetConnectTimeout(es, 120); /*DEFAULT_CONNECT_TIMEOUT_SECS*/
@@ -115,9 +233,6 @@ int main(void) {
 	int nlhs=-1;	/*Default value to initialize ES*/
 	int_T  nrhs;	/*Simply as argument filler. Unused*/
 	const mxArray  *prhs[1]; 	/*Simply as argument filler. Unused*/
-
-	int arr[3];	/*Argument for MyExtConnect*/
-	char name[]="localHost"; /*Host name to be passed to MyExtConnect*/
 
 	FILE *rtwPtr;
 	const char *fileName="test.txt"; //will of course have to be dynamic
@@ -196,11 +311,31 @@ int main(void) {
 
 	fclose(rtwPtr);
 
-	arr[0]=esGetVerbosity(ES);
-	arr[1]=17725; //TCP port value
-	arr[2]=esGetConnectTimeout(ES);
+
+	printf("\n!!!Starting the state machine!!!\n");
 
 
+	pthread_attr_t attr;
+	struct sched_param sched_param;
+
+
+	// Prepare task attributes
+	pthread_attr_init(&attr);
+	//pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);
+	//pthread_attr_setschedpolicy(&attr, SCHED_FIFO);
+
+	// Starting the base rate thread
+	//sched_param.sched_priority = MAX_PRIO;
+	//pthread_attr_setschedparam(&attr, &sched_param);
+	pthread_create(&statemachine_thread, &attr, statemachine, &ES);
+	pthread_attr_destroy(&attr);
+
+	// External mode
+	while (1) {}
+
+	pthread_join(statemachine_thread, NULL);
+
+#ifdef SWITCH
 	switch(esGetAction(ES)) {
 
 	    case EXT_CONNECT:
@@ -319,8 +454,7 @@ int main(void) {
 	            fflush(stdout);
 	            goto EXIT_POINT;
 	        } /* end switch */
-
-
+#endif
 
 	EXIT_POINT:
 	printf("\n---!!!Exit Success!!!---");

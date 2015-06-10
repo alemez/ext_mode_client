@@ -245,6 +245,8 @@ PRIVATE void ExtConnect(
     int_T          nrhs,
     const mxArray  *prhs[])
 {
+	printf("\n---ExtConnect---\n");
+	fflush(stdout);
     int_T          nGot;
     int_T          nSet;
     PktHeader      pktHdr;
@@ -501,6 +503,7 @@ PRIVATE void ExtDisconnectRequest(
     int_T          nrhs,
     const mxArray  *prhs[])
 {
+	printf("\n---ExtDisconnectRequest---\n");
     PktHeader pktHdr;
     int       nSet;
     boolean_T error = EXT_NO_ERROR;

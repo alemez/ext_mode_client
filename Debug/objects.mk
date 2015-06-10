@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -lmx -lmwrtiostreamutils
+LIBS := -lmx -lmwrtiostreamutils -lpthread
 
