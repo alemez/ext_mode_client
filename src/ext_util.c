@@ -137,6 +137,8 @@ PUBLIC int ExtUtilCreateRtIOStreamArgs(ExternalSim   *ES,
       char * argValue = 0;
       errorOccurred = ExtUtilProcessTCPIPHostArg(ES, prhs[0], &argValue);
       if (errorOccurred) {
+    	  printf("\nError with first arg");
+    	  fflush(stdout);
          return errorOccurred;
       } 
       else {
@@ -150,6 +152,8 @@ PUBLIC int ExtUtilCreateRtIOStreamArgs(ExternalSim   *ES,
       int argValue = 0;
       errorOccurred = ExtUtilProcessVerboseArg(ES, prhs[1], &argValue);
       if (errorOccurred) {
+    	  printf("\nError with 2nd arg");
+    	  fflush(stdout);
          return errorOccurred;
       } 
       else {
@@ -162,6 +166,8 @@ PUBLIC int ExtUtilCreateRtIOStreamArgs(ExternalSim   *ES,
       char * argValue = 0;
       errorOccurred = ExtUtilProcessTCPIPPortArg(ES, prhs[2], &argValue);
       if (errorOccurred) {
+    	  printf("\nError with 3rd arg");
+    	  fflush(stdout);
          return errorOccurred;
       } 
       else {
@@ -174,6 +180,8 @@ PUBLIC int ExtUtilCreateRtIOStreamArgs(ExternalSim   *ES,
    if(nrhs >= 4) {
        errorOccurred = ExtUtilProcessConnectTimeoutArg(ES, prhs[3], &connectTimeOutSecs);
        if (errorOccurred) {
+    	   printf("\nError with 4th arg");
+    	   fflush(stdout);
            return errorOccurred;
        }
    }

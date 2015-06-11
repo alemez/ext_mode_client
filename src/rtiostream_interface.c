@@ -75,6 +75,8 @@ PRIVATE void SleepMilliseconds(const int t_msecs)
  */
 PUBLIC void ExtOpenConnection(ExternalSim *ES)
 {
+	printf("\n---ExtOpenConnection---");
+	fflush(stdout);
     UserData * const userData = (UserData *)esGetUserData(ES);
 
     /* rtIOStreamOpen has already been called from ExtProcessArgs */
@@ -98,6 +100,8 @@ PUBLIC void ExtProcessArgs(
     int           nrhs,
     const mxArray *prhs[])
 {
+	printf("---ExtProcessArgs---");
+	fflush(stdout);
     int argc = 0;
     const char * argv[ARGC_MAX] = ARGV_INIT;
     UserData  * const userData = (UserData *)esGetUserData(ES);
@@ -110,6 +114,8 @@ PUBLIC void ExtProcessArgs(
           argv);
 
     if (errorOccurred) {
+    	printf("\n!!!errorOccured in ExtProcessArgs!!!");
+    	fflush(stdout);
        return;
     } 
 
@@ -237,6 +243,8 @@ PUBLIC boolean_T ExtSetTargetPkt(
     const char        *src,
     int               *nBytesSet) /* out */
 {   
+	printf("\n---ExtSetTargetPkt---");
+	fflush(stdout);
 	UserData *userData = (UserData *)esGetUserData(ES);
     boolean_T errorCode = EXT_NO_ERROR;
 	int retVal;	
@@ -283,6 +291,9 @@ PUBLIC boolean_T ExtTargetPktPending(
     long int          timeOutSecs,
     long int          timeOutUSecs)
 {
+	printf("\n---ExtTargetPktPending---");
+	fflush(stdout);
+
 #define SLEEP_MSECS 10
     boolean_T retVal = EXT_NO_ERROR;
     int result;
@@ -314,6 +325,8 @@ PUBLIC boolean_T ExtTargetPktPending(
                                 &sizeRecvd);
 
         if (result==RTIOSTREAM_ERROR) {
+        	printf("\n!!!rtiostream error!!!");
+        	fflush(stdout);
             retVal = EXT_ERROR;
             return retVal;
         }
@@ -322,6 +335,7 @@ PUBLIC boolean_T ExtTargetPktPending(
             SleepMilliseconds(SLEEP_MSECS);
         }
         num_attempts--;
+
     }
         
     if (sizeRecvd>0) {

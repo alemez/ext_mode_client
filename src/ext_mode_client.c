@@ -10,7 +10,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
 #include <pthread.h>
 #include <sched.h>
 #include <unistd.h>
@@ -36,6 +35,9 @@ void* statemachine(void *es)
 	int_T  nrhs;	/*Simply as argument filler. Unused*/
 	const mxArray  *prhs[1]; 	/*Simply as argument filler. Unused*/
 	ExternalSim * ES= (ExternalSim *) es;
+
+	nrhs=0;
+	prhs[0]=NULL;
 
 	while (cur_state!=-1) {
 		printf("\nPlease enter a state [0..15] or -1 to quit");
@@ -146,7 +148,7 @@ void* statemachine(void *es)
  * 		Hardcoded
  * 		Unnecessary?
  */
-ExternalSim* ExtSimStructDef(FILE* fIn )
+ExternalSim* ExtSimStructDef()
 {
 	printf("\n---Building External Sim struct---");
 	fflush(stdout);
@@ -155,40 +157,33 @@ ExternalSim* ExtSimStructDef(FILE* fIn )
 
 	esSetVersion(es, (sizeof(ExternalSim)*10000 + 200));	/*EXTSIM_VERSION*/
 	esSetModelName(es, "test");
-	//esSetBdPtr(es, val);	/*pointer*/
-	esSetTargetSimStatus(es, TARGET_STATUS_WAITING_TO_START);
 	esSetHostMWChunkSize(es, 256); 	/*ERTMultiwordLength?*/
+	esClearError(es);
+	esSetNumDataTypes(es, 14);	/*line 612 of test.rtw*/
 
+	/*Set in ExtConnect (ext_comm.c)*************************
+	esSetUserData(es, val);
 	esSetTargetModelCheckSum(es, 0, 3531395276U);
 	esSetTargetModelCheckSum(es, 1, 3407967652U);
 	esSetTargetModelCheckSum(es, 2, 1218549062U);
 	esSetTargetModelCheckSum(es, 3, 3708142253U);
+	esSetIntOnly(es, 0);
+	esSetTargetMWChunkSize(es, val);
+	esSetTargetSimStatus(es, TARGET_STATUS_WAITING_TO_START);
+	esSetRecvIncomingPktFcn(es, fcn);
+	 */
 
-	esSetAction(es, EXT_CONNECT);
-	esSetConnectionStatus(es, EXTMODE_CONNECTED);
+	/*Set in ExtRecvIncomingPkt (ext_comm.c)*******************
+	 esSetIncomingPktPending(es, val);
+	 esSetIncomingPkt(es, EXT_CONNECT_RESPONSE);
+	 esSetIncomingPktDataNBytesInBuf(es, val);
+	 esSetIncomingPktDataNBytesNeeded(es, val);
+	 */
 
-	esSetVerbosity(es, 1);	/*Verbose build chosen*/
-	esSetConnectTimeout(es, 120); /*DEFAULT_CONNECT_TIMEOUT_SECS*/
-	//esSetError(es, 0);
-
-	//esSetUserData(es, val); /*pointer*/
-	//esSetCommBuf(es, val);	/*pointer*/
-	//esSetCommBufSize(es, val);	/* size of communication buffer - in host bytes */
-	//esSetIncomingPktPending(es, val);
-	esSetIncomingPkt(es, EXT_CONNECT_RESPONSE);
-	//esSetIncomingPktDataBufSize(es, val);
-	//esSetIncomingPktDataBuf(es, val);
-	//esSetIncomingPktDataNBytesInBuf(es, val);
-	//esSetIncomingPktDataNBytesNeeded(es, val);
-	//esSetRecvIncomingPktFcn(es, fcn);
-	esSetIntOnly(es, 0);		/*?? I guessed- affects below functions*/
-	//esSetSwapBytes(es, val);
-	//esSetNumDataTypes(es, val)
-	//esSetHostBytesPerTargetByte(es, val);
-	//esSetDataTypeSize(es, idx, val);
-	//esSetTargetMWChunkSize(es, val);
-#ifdef abc
-	esSetDoubleTargetToHostFcn(es, Double_TargetToHost);/*ext_convert.c depends if int only or not*/
+	/*Set in ProcessConnectResponse1 (ext_convert.c)***********
+	 esSetSwapBytes(es, 0);
+	 esSetHostBytesPerTargetByte(es, val);
+	 esSetDoubleTargetToHostFcn(es, Double_TargetToHost);
 	esSetDoubleHostToTargetFcn(es, Double_HostToTarget);
 	esSetSingleTargetToHostFcn(es, Generic_TargetToHost);
 	esSetSingleHostToTargetFcn(es, Generic_HostToTarget);
@@ -208,7 +203,20 @@ ExternalSim* ExtSimStructDef(FILE* fIn )
 	esSetInt33PlusHostToTargetFcn(es, Int33Plus_HostToTarget);
 	esSetBoolTargetToHostFcn(es, Bool_TargetToHost);
 	esSetBoolHostToTargetFcn(es, Bool_HostToTarget);
-#endif
+	 */
+
+	/*Set in ProcessTargetDataSizes (ext_convert.c)***************
+	 esSetDataTypeSize(es, idx, val);
+	 */
+
+	/*Set in ExtUtilCreateRtIOStreamArgs (ext_util.c)*************
+	 esSetVerbosity(es, 1);
+	esSetConnectTimeout(es, 120);
+	 */
+
+	//esSetBdPtr(es, val);	/*pointer*/
+	//esSetIncomingPktDataBufSize(es, val);
+	//esSetIncomingPktDataBuf(es, val);
 
 	//esSetSizeOfTargetDataTypeFcn(es, fcn);
 	//esSetSizeOfDataTypeFcn(es, fcn);
@@ -231,12 +239,16 @@ int main(void) {
 	ExternalSim  *ES;	/*Pointer to ExternalSim struct, to pass as args*/
 
 	int nlhs=-1;	/*Default value to initialize ES*/
-	int_T  nrhs;	/*Simply as argument filler. Unused*/
-	const mxArray  *prhs[1]; 	/*Simply as argument filler. Unused*/
 
-	FILE *rtwPtr;
-	const char *fileName="test.txt"; //will of course have to be dynamic
-	rtwPtr= fopen(fileName, "r");
+	char *buf= (char *)malloc(2048);
+
+	if(buf==NULL)
+	{
+		printf("Error allocating memory for buffer");
+		fflush(stdout);
+	}
+
+
 
 #ifdef MX
 	/*For mxArray*/
@@ -270,20 +282,8 @@ int main(void) {
 			fflush(stdout);
 #endif
 
-	if(rtwPtr==NULL)
-	{
-		fprintf(stderr, "Cannot open the file!\n");
-		fflush(stdout);
-		exit(1);
-	}
-	else{
-		printf("\n---File opened---");
-		fflush(stdout);
-	}
-
-
 	 if (nlhs == -1) {
-		 ES=ExtSimStructDef(rtwPtr );
+		 ES=ExtSimStructDef();
 	        if (((int *)ES)[0] != EXTSIM_VERSION) {
 	        	fprintf(stderr,"\nError with EXTSIM_VERSION...Exiting...");
 	        	fflush(stdout);
@@ -309,11 +309,10 @@ int main(void) {
 	        goto EXIT_POINT;
 	    }
 
-	fclose(rtwPtr);
+	 esSetCommBuf(ES, buf);
+	 esSetCommBufSize(ES, 2048);	/* size of communication buffer - in host bytes */
 
-
-	printf("\n!!!Starting the state machine!!!\n");
-
+	 printf("\n!!!Starting the state machine!!!\n");
 
 	pthread_attr_t attr;
 	struct sched_param sched_param;
@@ -327,7 +326,7 @@ int main(void) {
 	// Starting the base rate thread
 	//sched_param.sched_priority = MAX_PRIO;
 	//pthread_attr_setschedparam(&attr, &sched_param);
-	pthread_create(&statemachine_thread, &attr, statemachine, &ES);
+	pthread_create(&statemachine_thread, &attr, statemachine, ES);
 	pthread_attr_destroy(&attr);
 
 	// External mode
@@ -457,6 +456,9 @@ int main(void) {
 #endif
 
 	EXIT_POINT:
+
+	free(buf);
+
 	printf("\n---!!!Exit Success!!!---");
 	fflush(stdout);
 	return EXIT_SUCCESS;

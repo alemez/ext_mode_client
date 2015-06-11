@@ -929,6 +929,8 @@ void Copy32BitsFromTarget(
     const char  * const src,
     const int    n)
 {
+	printf("\n---Copy32BitsFromTarget---");
+	fflush(stdout);
     const boolean_T swapBytes = esGetSwapBytes(ES);
     slCopyNBytes(dst, src, n, swapBytes, 4);
 } /*lint !e952 !e818 Parameter 'ES' could be declared const and as pointing to
@@ -950,6 +952,8 @@ void Copy32BitsFromTarget(
  */
 void ProcessConnectResponse1(ExternalSim *ES, PktHeader *pktHdr)
 {
+	printf("\n---ProcessConnectResponse1---");
+	fflush(stdout);
     /*
      * Deduce the endian-ness of the target.
      */
@@ -969,7 +973,7 @@ void ProcessConnectResponse1(ExternalSim *ES, PktHeader *pktHdr)
      * Process bits per target byte.
      */
     {
-        const int_T bitsPerTargetByte      = pktHdr->size; /*lint !e713 Loss of precision (initialization) (unsigned int to int) */
+    	const int_T bitsPerTargetByte      = pktHdr->size; /*lint !e713 Loss of precision (initialization) (unsigned int to int) */
         const int_T hostBytesPerTargetByte = bitsPerTargetByte/8;
         
         assert(bitsPerTargetByte%8 == 0);

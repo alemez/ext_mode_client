@@ -11,7 +11,7 @@
 #define MAIN_INCL_H_
 
 
-ExternalSim* ExtSimStructDef(FILE* fIn );
+ExternalSim* ExtSimStructDef();
 
 void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[]);
 void MyExtProcessArgs(ExternalSim *ES, const char hostName[], const int arr[]);

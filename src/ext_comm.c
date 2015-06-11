@@ -55,6 +55,8 @@ PRIVATE boolean_T ExtRecvIncomingPktHeader(
     ExternalSim *ES,
     PktHeader   *pktHdr)
 {
+	printf("\n---ExtRecvIncomingPktHeader---");
+	fflush(stdout);
     char      *bufPtr;
     int       nBytes     = 0;    /* total pkt header bytes recv'd. */
     int       nGot       = 0;    /* num bytes recv'd in one call to ExtGetTargetPkt. */
@@ -247,6 +249,7 @@ PRIVATE void ExtConnect(
 {
 	printf("\n---ExtConnect---\n");
 	fflush(stdout);
+
     int_T          nGot;
     int_T          nSet;
     PktHeader      pktHdr;
@@ -271,6 +274,8 @@ PRIVATE void ExtConnect(
     {
         UserData *userData = ExtUserDataCreate();
         if (userData == NULL) {
+        	printf("\nMemory allocation error");
+        	fflush(stdout);
             esSetError(ES, "Memory allocation error.");
             goto EXIT_POINT;
         }
@@ -283,7 +288,9 @@ PRIVATE void ExtConnect(
      */
     assert(esIsErrorClear(ES));
     ExtProcessArgs(ES,nrhs,prhs);
-    if (!esIsErrorClear(ES)) {                     
+    if (!esIsErrorClear(ES)) {
+    	printf("\nFailed to connect to target");
+    	fflush(stdout);
         const char errMsgHeader[] = "Failed to connect to the target. Possible reasons for the failure:";
         sprintf(failedToConnectErrMsg, "%s\n %s\n Caused by:\n %s", errMsgHeader, failedToConnectCauses, esGetError(ES));        
         esSetError(ES, failedToConnectErrMsg);
@@ -294,7 +301,12 @@ PRIVATE void ExtConnect(
     timeOutSecs  =  (long int) esGetConnectTimeout(ES);
     
     ExtOpenConnection(ES);
-    if (!esIsErrorClear(ES)) goto EXIT_POINT;
+    if (!esIsErrorClear(ES))
+    	{
+    		printf("\nError with ext open connection");
+    		fflush(stdout);
+    		goto EXIT_POINT;
+    	}
 
     /*
      * Send the EXT_CONNECT pkt to the target.  This packet consists
@@ -304,6 +316,8 @@ PRIVATE void ExtConnect(
     (void)memcpy((void *)&pktHdr,"ext-mode",8);
     error = ExtSetTargetPkt(ES,sizeof(pktHdr),(char *)&pktHdr,&nSet);
     if (error || (nSet != sizeof(pktHdr))) {
+    	printf("\nExtSetTargetPkt() call failed on EXT_CONNECT");
+    	fflush(stdout);
         esSetError(ES, "ExtSetTargetPkt() call failed on EXT_CONNECT.\n"
 	               "Ensure target is still running\n");
         goto EXIT_POINT;
@@ -321,6 +335,8 @@ PRIVATE void ExtConnect(
      */
     error = ExtTargetPktPending(ES, &pending, timeOutSecs, timeOutUSecs);
     if (error || !pending) {
+    	printf("\nFailed to connect to target");
+    	fflush(stdout);
         const char errMsgHeader[] = "Failed to connect to the target. A time-out occurred while "
                 "waiting for the first connect response packet. Possible reasons for the time-out:";
         sprintf(failedToConnectErrMsg, "%s\n%s", errMsgHeader, failedToConnectCauses);
@@ -488,6 +504,8 @@ EXIT_POINT:
     if (!esIsErrorClear(ES)) {
         ExtCloseConnection(ES);
         FreeAndNullUserData(ES);
+        printf("\n---Ext finished with errors---");
+        fflush(stdout);
     }
 } /* end ExtConnect */
 
@@ -602,6 +620,8 @@ PRIVATE void ExtSendGenericPkt(
     int_T          nrhs,
     const mxArray  *prhs[])
 {
+	printf("\n---ExtSendGenericPkt---\n");
+
     int        nSet;
     PktHeader  pktHdr;
     int        pktSize;
@@ -610,11 +630,12 @@ PRIVATE void ExtSendGenericPkt(
     (void)nrhs; /* unused */
     (void)prhs; /* unused */
 
-    pktSize = esGetCommBufSize(ES);
-    
+    pktSize =esGetCommBufSize(ES);
+
     pktHdr.type = (uint32_T)esGetAction(ES);
     pktHdr.size = (uint32_T)(pktSize/esGetHostBytesPerTargetByte(ES));
-    
+    printf("\nMade it!");
+
     Copy32BitsToTarget(ES, (char *)&pktHdr, (uint32_T *)&pktHdr, NUM_HDR_ELS);
     if (!esIsErrorClear(ES)) goto EXIT_POINT;
 
