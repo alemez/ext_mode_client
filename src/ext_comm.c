@@ -349,7 +349,12 @@ PRIVATE void ExtConnect(
     if (error) goto EXIT_POINT;
             
     ProcessConnectResponse1(ES, &pktHdr);
-    if (!esIsErrorClear(ES)) goto EXIT_POINT;
+    if (!esIsErrorClear(ES))
+    	{
+    		printf("\nError with ProcessConnectResponse1");
+    		fflush(stdout);
+    		goto EXIT_POINT;
+    	}
     
     if (esGetVerbosity(ES)) {
         MachByteOrder hostEndian = 
@@ -383,6 +388,8 @@ PRIVATE void ExtConnect(
      */
     error = ExtTargetPktPending(ES, &pending, timeOutSecs, timeOutUSecs);
     if (error || !pending) {
+    	printf("\nError waiting for second connect response packet");
+    	fflush(stdout);
         esSetError(
             ES, "Timed-out waiting for second connect response packet.\n");
         goto EXIT_POINT;
@@ -391,9 +398,15 @@ PRIVATE void ExtConnect(
 
     error = ExtRecvIncomingPktHeader(ES, &pktHdr);
     if (error) goto EXIT_POINT;
-            
+
+
     Copy32BitsFromTarget(ES, (uint32_T *)&pktHdr, (char *)&pktHdr, NUM_HDR_ELS);
-    if (!esIsErrorClear(ES)) goto EXIT_POINT;
+    if (!esIsErrorClear(ES))
+    	{
+    		printf("\nError with second Copy32BitsFromTarget");
+    		fflush(stdout);
+    		goto EXIT_POINT;
+    	}
 
     if (pktHdr.type != EXT_CONNECT_RESPONSE) {
         esSetError(ES, "Unexpected response from target. "
