@@ -912,6 +912,8 @@ void Copy32BitsToTarget(
     const void   * const src,
     const int    n)
 {
+	printf("\n---Copy32BitsToTarget---");
+	fflush(stdout);
     const boolean_T swapBytes = esGetSwapBytes(ES);
     slCopyNBytes(dst, src, n, swapBytes, 4);
 } /*lint !e952 !e818 Parameter 'ES' could be declared const and as pointing to
@@ -974,7 +976,9 @@ void ProcessConnectResponse1(ExternalSim *ES, PktHeader *pktHdr)
      */
     {
     	const int_T bitsPerTargetByte      = pktHdr->size; /*lint !e713 Loss of precision (initialization) (unsigned int to int) */
-        const int_T hostBytesPerTargetByte = bitsPerTargetByte/8;
+       printf("\nbits per target byte: %d", bitsPerTargetByte);
+       fflush(stdout);
+    	const int_T hostBytesPerTargetByte = bitsPerTargetByte/8;
         
         assert(bitsPerTargetByte%8 == 0);
         esSetHostBytesPerTargetByte(ES, (uint8_T)hostBytesPerTargetByte);
@@ -1087,6 +1091,8 @@ void ProcessConnectResponse1(ExternalSim *ES, PktHeader *pktHdr)
  */
 void ProcessTargetDataSizes(const ExternalSim * const ES, const uint32_T *bufPtr)
 {
+	printf("\n---ProcessTargetDataSizes---");
+	fflush(stdout);
     uint32_T i;
     const uint32_T hostNDataTypes = esGetNumDataTypes(ES);
     const uint32_T targNDataTypes = *bufPtr++;

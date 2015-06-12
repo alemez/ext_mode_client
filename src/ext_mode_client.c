@@ -49,6 +49,7 @@ void* statemachine(void *es)
 			printf("State 0 (EXT_CONNECT) will be processed\n");
 			esSetAction(ES, EXT_CONNECT);
 			esSetConnectionStatus(ES, EXTMODE_CONNECTED);
+			esClearError(ES);
 			ExtConnect(ES, nrhs, prhs);
 			if (esGetVerbosity(ES)) {
 				printf("\naction: EXT_CONNECT\n");
@@ -310,7 +311,8 @@ int main(void) {
 	    }
 
 	 esSetCommBuf(ES, buf);
-	 esSetCommBufSize(ES, 2048);	/* size of communication buffer - in host bytes */
+	 esSetCommBufSize(ES, 1064);	/* size of communication buffer - in host bytes */
+	 ES->TargetDataInfo.dataTypeSizes=malloc(14*sizeof(uint32_T));
 
 	 printf("\n!!!Starting the state machine!!!\n");
 
@@ -458,6 +460,7 @@ int main(void) {
 	EXIT_POINT:
 
 	free(buf);
+	free(ES->DTypeFcn.sizeOfDataType);
 
 	printf("\n---!!!Exit Success!!!---");
 	fflush(stdout);

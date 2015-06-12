@@ -409,6 +409,8 @@ PRIVATE void ExtConnect(
     	}
 
     if (pktHdr.type != EXT_CONNECT_RESPONSE) {
+    	printf("\n!!Error. Unexpected response from target.");
+    	fflush(stdout);
         esSetError(ES, "Unexpected response from target. "
                        "Expected EXT_CONNECT_RESPONSE.\n");
         goto EXIT_POINT;
@@ -423,8 +425,13 @@ PRIVATE void ExtConnect(
         int_T    pktSize    = pktHdr.size * esGetHostBytesPerTargetByte(ES);
         int      bytesToGet = pktSize;
 
+        printf("\npkt hdr size: %d  host per targ: %d", pktHdr.size,esGetHostBytesPerTargetByte(ES));
+        fflush(stdout);
+
         tmpBuf = (uint32_T *)malloc(pktSize);
         if (tmpBuf == NULL) {
+        	printf("\n!!Memory allocation error!!");
+        	fflush(stdout);
             esSetError(ES, "Memory allocation failure\n");
             goto EXIT_POINT;
         }
@@ -444,6 +451,9 @@ PRIVATE void ExtConnect(
                  */
                 error = ExtTargetPktPending(ES,&pending,timeOutSecs,timeOutUSecs);
                 if (error || !pending) {
+                	printf("\nExtTargetPktPending() call failed while checking"
+                			"for 2nd EXT_CONNECT_RESPONSE target pkt");
+                	fflush(stdout);
                     free(tmpBuf);
                     esSetError(
                         ES, "ExtTargetPktPending() call failed while checking "
@@ -491,7 +501,7 @@ PRIVATE void ExtConnect(
             printf("target integer only code:\t%s\n",
                       (esGetIntOnly(ES)) ? "true":"false");
         }
-    
+
         /* process multiword data type chunk size */
         esSetTargetMWChunkSize(ES, *bufPtr++);
 
@@ -502,7 +512,7 @@ PRIVATE void ExtConnect(
     
         /* process target status */
         esSetTargetSimStatus(ES, (TargetSimStatus)*bufPtr++);
-        
+
         ProcessTargetDataSizes(ES, bufPtr);
         free(tmpBuf);
         if (!esIsErrorClear(ES)) goto EXIT_POINT;
@@ -633,7 +643,7 @@ PRIVATE void ExtSendGenericPkt(
     int_T          nrhs,
     const mxArray  *prhs[])
 {
-	printf("\n---ExtSendGenericPkt---\n");
+	printf("\n---ExtSendGenericPkt---");
 
     int        nSet;
     PktHeader  pktHdr;
@@ -647,10 +657,14 @@ PRIVATE void ExtSendGenericPkt(
 
     pktHdr.type = (uint32_T)esGetAction(ES);
     pktHdr.size = (uint32_T)(pktSize/esGetHostBytesPerTargetByte(ES));
-    printf("\nMade it!");
 
     Copy32BitsToTarget(ES, (char *)&pktHdr, (uint32_T *)&pktHdr, NUM_HDR_ELS);
-    if (!esIsErrorClear(ES)) goto EXIT_POINT;
+    if (!esIsErrorClear(ES))
+    	{
+    		printf("\n!!Error with Copy32BitsToTarget in ExtSendGenericPkt()");
+    		fflush(stdout);
+    		goto EXIT_POINT;
+    	}
 
     /*
      * Send packet header.
@@ -678,8 +692,7 @@ PRIVATE void ExtSendGenericPkt(
             goto EXIT_POINT;
         }
     }
-printf("\nend");
-fflush(stdout);
+
 EXIT_POINT:
     return;
 } /* end ExtSendGenericPkt */
