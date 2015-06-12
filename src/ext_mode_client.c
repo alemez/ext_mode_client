@@ -162,63 +162,10 @@ ExternalSim* ExtSimStructDef()
 	esClearError(es);
 	esSetNumDataTypes(es, 14);	/*line 612 of test.rtw*/
 
-	/*Set in ExtConnect (ext_comm.c)*************************
-	esSetUserData(es, val);
-	esSetTargetModelCheckSum(es, 0, 3531395276U);
-	esSetTargetModelCheckSum(es, 1, 3407967652U);
-	esSetTargetModelCheckSum(es, 2, 1218549062U);
-	esSetTargetModelCheckSum(es, 3, 3708142253U);
-	esSetIntOnly(es, 0);
-	esSetTargetMWChunkSize(es, val);
-	esSetTargetSimStatus(es, TARGET_STATUS_WAITING_TO_START);
-	esSetRecvIncomingPktFcn(es, fcn);
-	 */
-
-	/*Set in ExtRecvIncomingPkt (ext_comm.c)*******************
-	 esSetIncomingPktPending(es, val);
-	 esSetIncomingPkt(es, EXT_CONNECT_RESPONSE);
-	 esSetIncomingPktDataNBytesInBuf(es, val);
-	 esSetIncomingPktDataNBytesNeeded(es, val);
-	 */
-
-	/*Set in ProcessConnectResponse1 (ext_convert.c)***********
-	 esSetSwapBytes(es, 0);
-	 esSetHostBytesPerTargetByte(es, val);
-	 esSetDoubleTargetToHostFcn(es, Double_TargetToHost);
-	esSetDoubleHostToTargetFcn(es, Double_HostToTarget);
-	esSetSingleTargetToHostFcn(es, Generic_TargetToHost);
-	esSetSingleHostToTargetFcn(es, Generic_HostToTarget);
-	esSetInt8TargetToHostFcn(es, Generic_TargetToHost);
-	esSetInt8HostToTargetFcn(es, Generic_HostToTarget);
-	esSetUInt8TargetToHostFcn(es, Generic_TargetToHost);
-	esSetUInt8HostToTargetFcn(es, Generic_HostToTarget);
-	esSetInt16TargetToHostFcn(es, Generic_TargetToHost);
-	esSetInt16HostToTargetFcn(es, Generic_HostToTarget);
-	esSetUInt16TargetToHostFcn(es, Generic_TargetToHost);
-	esSetUInt16HostToTargetFcn(es, Generic_HostToTarget);
-	esSetInt32TargetToHostFcn(es, Generic_TargetToHost);
-	esSetInt32HostToTargetFcn(es, Generic_HostToTarget);
-	esSetUInt32TargetToHostFcn(es, Generic_TargetToHost);
-	esSetUInt32HostToTargetFcn(es, Generic_HostToTarget);
-	esSetInt33PlusTargetToHostFcn(es, Int33Plus_TargetToHost);
-	esSetInt33PlusHostToTargetFcn(es, Int33Plus_HostToTarget);
-	esSetBoolTargetToHostFcn(es, Bool_TargetToHost);
-	esSetBoolHostToTargetFcn(es, Bool_HostToTarget);
-	 */
-
-	/*Set in ProcessTargetDataSizes (ext_convert.c)***************
-	 esSetDataTypeSize(es, idx, val);
-	 */
-
-	/*Set in ExtUtilCreateRtIOStreamArgs (ext_util.c)*************
-	 esSetVerbosity(es, 1);
-	esSetConnectTimeout(es, 120);
-	 */
-
+	/*-----------Unnecessary?!? ----------------------*/
 	//esSetBdPtr(es, val);	/*pointer*/
 	//esSetIncomingPktDataBufSize(es, val);
 	//esSetIncomingPktDataBuf(es, val);
-
 	//esSetSizeOfTargetDataTypeFcn(es, fcn);
 	//esSetSizeOfDataTypeFcn(es, fcn);
 
@@ -248,40 +195,6 @@ int main(void) {
 		printf("Error allocating memory for buffer");
 		fflush(stdout);
 	}
-
-
-
-#ifdef MX
-	/*For mxArray*/
-	mxArray *prhs[4];
-	int ndim=1, dims[]={1};
-	int i;
-	int *verbos;//=1;
-	int *tcp_port;//=17725;
-	int *timeout;//=120;
-
-	verbos=mxCalloc(1, sizeof(int));
-	tcp_port=mxCalloc(1, sizeof(int));
-	timeout=mxCalloc(1, sizeof(int));
-
-	verbos[0]=1;
-	tcp_port[0]=17725;
-	timeout[0]=120;
-
-	prhs[0]=mxCreateCharArray(ndim, dims);
-
-
-
-	prhs[1]=mxCreateNumericArray(ndim, dims, mxINT8_CLASS, mxREAL);
-	prhs[2]=mxCreateNumericArray(ndim, dims, mxINT32_CLASS, mxREAL);
-	prhs[3]=mxCreateNumericArray(ndim, dims, mxINT32_CLASS, mxREAL);
-
-	mxSetData(prhs[1], verbos); //set data being problematic....
-	mxSetData(prhs[2], tcp_port);
-	mxSetData(prhs[3], timeout);
-	printf("---here 2---");
-			fflush(stdout);
-#endif
 
 	 if (nlhs == -1) {
 		 ES=ExtSimStructDef();

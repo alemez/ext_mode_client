@@ -562,6 +562,8 @@ PRIVATE void ExtDisconnectRequest(
 
     error = ExtSetTargetPkt(ES,sizeof(pktHdr),(char *)&pktHdr,&nSet);
     if (error || (nSet != sizeof(pktHdr))) {
+    	printf("\n!!Finishing with errors in ExtDisconnectRequest");
+    	fflush(stdout);
         esSetError(ES, "ExtSetTargetPkt() call failed on CLOSE.\n"
 	               "Ensure target is still running\n");
         goto EXIT_POINT;
