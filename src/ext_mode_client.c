@@ -36,8 +36,8 @@ void* statemachine(void *es)
 	const mxArray  *prhs[1]; 	/*Simply as argument filler. Unused*/
 	ExternalSim * ES= (ExternalSim *) es;
 
-	nrhs=0;
-	prhs[0]=NULL;
+	nrhs=0; /*Initialize to 0 so that the client connects properly*/
+	prhs[0]=NULL; /*not used*/
 
 	while (cur_state!=-1) {
 		printf("\nPlease enter a state [0..15] or -1 to quit");
@@ -82,7 +82,7 @@ void* statemachine(void *es)
 		case 5 :
 			printf("State 5 (EXT_GETPARAMS) will be processed\n");
 			esSetAction(ES, EXT_GETPARAMS);
-            ExtSendGenericPkt(ES, nrhs, prhs);
+			ExtGetParams(ES, nrhs, prhs);
 			break;
 		case 6 :
 			printf("State 6 (EXT_SELECT_SIGNALS) will be processed\n");
@@ -159,7 +159,7 @@ ExternalSim* ExtSimStructDef()
 	esSetVersion(es, (sizeof(ExternalSim)*10000 + 200));	/*EXTSIM_VERSION*/
 	esSetModelName(es, "test");
 	esSetHostMWChunkSize(es, 256); 	/*ERTMultiwordLength?*/
-	esClearError(es);
+	esClearError(es);		/*Set error to null to begin*/
 	esSetNumDataTypes(es, 14);	/*line 612 of test.rtw*/
 
 	/*-----------Unnecessary?!? ----------------------*/
@@ -374,6 +374,7 @@ int main(void) {
 
 	free(buf);
 	free(ES->DTypeFcn.sizeOfDataType);
+	free(ES);
 
 	printf("\n---!!!Exit Success!!!---");
 	fflush(stdout);

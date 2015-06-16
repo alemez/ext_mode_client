@@ -711,6 +711,8 @@ PRIVATE void ExtGetParams(
     int_T          nrhs,
     const mxArray  *prhs[])
 {
+	printf("\n---ExtGetParams---");
+	fflush(stdout);
     int            nSet;
     int            nGot;
     int            bytesToGet;
@@ -762,10 +764,24 @@ PRIVATE void ExtGetParams(
      */
     Copy32BitsFromTarget(ES,
         (uint32_T *)&pktHdr, (char *)&pktHdr, NUM_HDR_ELS);
+
+    /*
+     * Hard coded- find out when this is supposed to happen. (probably
+     * above in ExtRecvIncomingPktHeader)
+     */
+    esSetAction(ES, EXT_GETPARAMS_RESPONSE);
+    pktHdr.type=(uint32_T)esGetAction(ES);
+
     assert(pktHdr.type == EXT_GETPARAMS_RESPONSE);
-    if (!esIsErrorClear(ES)) goto EXIT_POINT;
+    if (!esIsErrorClear(ES))
+    	{
+    		printf("\n!!Error after assert!!");
+    		fflush(stdout);
+    		goto EXIT_POINT;
+    	}
             
     bytesToGet = pktHdr.size * esGetHostBytesPerTargetByte(ES);
+    printf("\n bytes to get: %d", bytesToGet);
 
     /*
      * Get the parameters.
@@ -777,6 +793,8 @@ PRIVATE void ExtGetParams(
          */
         error = ExtTargetPktPending(ES, &pending, timeOutSecs, timeOutUSecs);
         if (error || !pending) {
+        	printf("\n!!Error with checking for target!!");
+        	fflush(stdout);
             esSetError(
                 ES, "ExtTargetPktPending() call failed while checking "
                     " for target pkt\n");
@@ -788,6 +806,8 @@ PRIVATE void ExtGetParams(
          */
         error = ExtGetTargetPkt(ES,bytesToGet,&nGot,buf);
         if (error) {
+        		printf("\n!!Error while checking target pkt's");
+        		fflush(stdout);
             esSetError(ES, 
                        "ExtGetTargetPkt() call failed while checking "
                        " target pkt's\n");
