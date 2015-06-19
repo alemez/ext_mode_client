@@ -47,7 +47,7 @@ PRIVATE void FreeAndNullUserData(ExternalSim *ES)
 } /* end FreeAndNullUserData */
 
 
-/* Function: ExtGetPktHdr ===== ================================================
+/* Function: ExtGetPktHdr =====================================================
  * Abstract:
  *  Get all bytes comprising a single packet header on the comm line.
  */
@@ -96,6 +96,8 @@ PRIVATE boolean_T ExtRecvIncomingPktHeader(
             bufPtr = (char_T *)pktHdr + nBytes;
             error = ExtGetTargetPkt(ES,sizeof(PktHeader)-nBytes,&nGot,bufPtr);
             if (error) {
+            	printf("\nExtGetTargetPkt() call failed while checking "
+                           " target pkt header.");
                 esSetError(ES, 
                            "ExtGetTargetPkt() call failed while checking "
                            " target pkt header.\n");
@@ -117,6 +119,7 @@ PRIVATE boolean_T ExtRecvIncomingPktHeader(
         if (nGot == 0) {
             noDataCntr--;
             if (noDataCntr == 0) {
+            	printf("\n!!Error!!");
                 error = 1;
                 esSetError(ES, 
                            "ExtGetTargetPkt() call failed while checking "
@@ -141,6 +144,8 @@ PRIVATE void ExtRecvIncomingPkt(
     int_T          nrhs,
     const mxArray  *prhs[])
 {
+	printf("\n---ExtRecvIncomingPkt---");
+	fflush(stdout);
     boolean_T pending;
     char      *bufPtr;
     int       nGot         = 0;
@@ -425,9 +430,6 @@ PRIVATE void ExtConnect(
         int_T    pktSize    = pktHdr.size * esGetHostBytesPerTargetByte(ES);
         int      bytesToGet = pktSize;
 
-        printf("\npkt hdr size: %d  host per targ: %d", pktHdr.size,esGetHostBytesPerTargetByte(ES));
-        fflush(stdout);
-
         tmpBuf = (uint32_T *)malloc(pktSize);
         if (tmpBuf == NULL) {
         	printf("\n!!Memory allocation error!!");
@@ -522,6 +524,8 @@ PRIVATE void ExtConnect(
      * Set up function pointers for Simulink.
      */
     esSetRecvIncomingPktFcn(ES, ExtRecvIncomingPkt);
+
+    printf("\n!!swap bytes: %d", esGetSwapBytes(ES));
 
 EXIT_POINT:
     if (!esIsErrorClear(ES)) {
@@ -758,6 +762,7 @@ PRIVATE void ExtGetParams(
      */
     error = ExtRecvIncomingPktHeader(ES, &pktHdr);
     if (error) goto EXIT_POINT;
+    //ExtRecvIncomingPkt(ES, nrhs, prhs); //I added  this
             
     /*
      * Convert size to host format/host bytes & verify packet type.
@@ -771,6 +776,7 @@ PRIVATE void ExtGetParams(
      */
     esSetAction(ES, EXT_GETPARAMS_RESPONSE);
     pktHdr.type=(uint32_T)esGetAction(ES);
+    pktHdr.size=2048;
 
     assert(pktHdr.type == EXT_GETPARAMS_RESPONSE);
     if (!esIsErrorClear(ES))

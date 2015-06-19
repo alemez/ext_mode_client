@@ -77,12 +77,14 @@ void* statemachine(void *es)
 		case 4 :
 			printf("State 4 (EXT_SETPARAM) will be processed\n");
 			esSetAction(ES, EXT_SETPARAM);
+            UserSetParams(ES);
             ExtSendGenericPkt(ES, nrhs, prhs);
 			break;
 		case 5 :
 			printf("State 5 (EXT_GETPARAMS) will be processed\n");
 			esSetAction(ES, EXT_GETPARAMS);
 			ExtGetParams(ES, nrhs, prhs);
+			DisplayGetParams(ES);
 			break;
 		case 6 :
 			printf("State 6 (EXT_SELECT_SIGNALS) will be processed\n");
@@ -144,34 +146,97 @@ void* statemachine(void *es)
 
 /*Function: ExtSimStructDef====================================================
  * Abstract:
- * 		Assigns data found in the file fIn to the appropriate fields in the
+ * 		Assigns certain data found in the file rtw to the appropriate fields in the
  * 		External Sim struct.
- * 		Hardcoded
- * 		Unnecessary?
+ *
  */
 ExternalSim* ExtSimStructDef()
 {
 	printf("\n---Building External Sim struct---");
 	fflush(stdout);
 
-	ExternalSim *es=malloc(sizeof *es);
+	ExternalSim *es=malloc(sizeof(ExternalSim));
+	FILE * rtw;
+	char modelName[100];
+	char fileName[100];
+	char line[256]; /*Line pointer to read in from file*/
+	int numDataTypes, numDataTypesLine=612;
+	int i, count=0;
 
+	for(i=0; i<100; i++)
+		modelName[i]='\0';
+
+	FILENAME:
+		printf("\n\nPlease enter the model name (ex: test): ");
+		scanf("%s", modelName);
+
+		strcpy(fileName, modelName);
+		strcat(fileName, ".txt");
+
+		rtw=fopen(fileName, "r");
+
+		if(rtw==NULL){
+			printf("\nCouldn't open file! Please try again.");
+			goto FILENAME;
+		}
+
+		i=0;
+		while(fgets(line, sizeof(line), rtw)!=NULL)
+		{
+			if(count==numDataTypesLine-1)
+			{
+				printf("\n!! %s", line);
+				while(!isdigit(line[i]))
+					i++;
+				numDataTypes=line[i]-48; /*From ASCII char code to num*/
+
+				if(isdigit(line[i++]))
+				{
+					numDataTypes*=10;
+					numDataTypes= numDataTypes + (line[i]-48);
+				}
+				esSetNumDataTypes(es, numDataTypes);	/*line 612 of test.rtw*/
+				break;
+			}
+			else
+				count++;
+		}
+
+	esSetModelName(es, modelName); /*given by user*/
+
+	/*Assuming thus far that these are the same for every model.*/
 	esSetVersion(es, (sizeof(ExternalSim)*10000 + 200));	/*EXTSIM_VERSION*/
-	esSetModelName(es, "test");
 	esSetHostMWChunkSize(es, 256); 	/*ERTMultiwordLength?*/
 	esClearError(es);		/*Set error to null to begin*/
-	esSetNumDataTypes(es, 14);	/*line 612 of test.rtw*/
+
+	esSetIncomingPktDataNBytesNeeded(es, -1);
+	esSetIncomingPktDataNBytesInBuf (es, 0 );
 
 	/*-----------Unnecessary?!? ----------------------*/
 	//esSetBdPtr(es, val);	/*pointer*/
-	//esSetIncomingPktDataBufSize(es, val);
-	//esSetIncomingPktDataBuf(es, val);
 	//esSetSizeOfTargetDataTypeFcn(es, fcn);
 	//esSetSizeOfDataTypeFcn(es, fcn);
 
+	fclose(rtw);
 	return es;
 }
 
+/*Function: DisplayGetParams================================================
+ * Abstract: Displays the parameter identifiers available in
+ * 			 the model to the user
+ */
+void DisplayGetParams(ExternalSim *es)
+{
+
+}
+
+/*Function: UserSetParams===================================================
+ * Abstract: Allows the user to change certain parameters
+ */
+void UserSetParams(ExternalSim *es)
+{
+
+}
 
 
 /* Function: main =======================================================
@@ -186,9 +251,8 @@ int main(void) {
 
 	ExternalSim  *ES;	/*Pointer to ExternalSim struct, to pass as args*/
 
-	int nlhs=-1;	/*Default value to initialize ES*/
-
-	char *buf= (char *)malloc(2048);
+	char *buf= (char *)malloc(1064); /*The communication buffer*/
+	char *incomingBuf= (char *) malloc(2048); /*The incoming packet buffer */
 
 	if(buf==NULL)
 	{
@@ -196,7 +260,6 @@ int main(void) {
 		fflush(stdout);
 	}
 
-	 if (nlhs == -1) {
 		 ES=ExtSimStructDef();
 	        if (((int *)ES)[0] != EXTSIM_VERSION) {
 	        	fprintf(stderr,"\nError with EXTSIM_VERSION...Exiting...");
@@ -215,17 +278,14 @@ int main(void) {
 	         * subsequent calls can be made more efficiently.
 	         */
 	        esSetMexFuncGateWayFcn(ES,main);
-	    } else {
-		printf("\nThis external mex file is used by Simulink in external "
-			  "mode\nfor communicating with Code Generation targets "
-			  "using interprocess communications.\n");
-		fflush(stdout);
-	        goto EXIT_POINT;
-	    }
+
 
 	 esSetCommBuf(ES, buf);
 	 esSetCommBufSize(ES, 1064);	/* size of communication buffer - in host bytes */
-	 ES->TargetDataInfo.dataTypeSizes=malloc(14*sizeof(uint32_T));
+	 ES->TargetDataInfo.dataTypeSizes=malloc(esGetNumDataTypes(ES)*sizeof(uint32_T));
+
+	 esSetIncomingPktDataBufSize(ES, 2048);
+	 esSetIncomingPktDataBuf(ES, incomingBuf); /*The buffer for incoming packets*/
 
 	 printf("\n!!!Starting the state machine!!!\n");
 
@@ -373,6 +433,7 @@ int main(void) {
 	EXIT_POINT:
 
 	free(buf);
+	free(incomingBuf);
 	free(ES->DTypeFcn.sizeOfDataType);
 	free(ES);
 

@@ -187,6 +187,8 @@ PUBLIC boolean_T ExtGetTargetPkt(
     int               *nBytesGot, /* out */
     char              *dst)       /* out */
 {
+	printf("\n---ExtGetTargetPkt---");
+	fflush(stdout);
     int retVal;
     boolean_T error;
     size_t sizeRecvd;

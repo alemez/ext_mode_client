@@ -13,15 +13,8 @@
 
 ExternalSim* ExtSimStructDef();
 
-void MyExtConnect(ExternalSim *ES, const char hostName[], const int arr[]);
-void MyExtProcessArgs(ExternalSim *ES, const char hostName[], const int arr[]);
-boolean_T MyExtRecvIncomingPktHeader( ExternalSim *ES, PktHeader   *pktHdr);
-void MyFreeAndNullUserData(ExternalSim *ES);
-int MyExtUtilCreateRtIOStreamArgs(ExternalSim   *ES,
-                        const char hostName[],
-                        const int arr[],
-                        int * argc,
-                        const char * argv[]);
+void DisplayGetParams(ExternalSim *es);
+void UserSetParams(ExternalSim *es);
 
 
 #endif /* MAIN_INCL_H_ */
