@@ -683,7 +683,14 @@ PRIVATE void ExtSendGenericPkt(
 	              "Ensure target is still running\n");
         goto EXIT_POINT;
     }
-
+    int32_T i=0, n;
+    char *buf=esGetCommBuf(ES);
+    	while(i<=esGetCommBufSize(ES)){
+    		(void)memcpy(&n, buf, sizeof(int32_T));
+    		printf("! %d ", n);
+    		i+=sizeof(int32_T);
+    		buf+=sizeof(int32_T);
+    	}
     /*
      * Send packet data - if any.
      */
@@ -762,21 +769,21 @@ PRIVATE void ExtGetParams(
      */
     error = ExtRecvIncomingPktHeader(ES, &pktHdr);
     if (error) goto EXIT_POINT;
-    //ExtRecvIncomingPkt(ES, nrhs, prhs); //I added  this
-            
+
+    /*
+     * EXT_GETPARAMS_RESPONSE should be set in ext_svr.c
+     * clearly then the target and client are not communicating
+
+    esSetAction(ES, EXT_GETPARAMS_RESPONSE);
+    pktHdr.type=(uint32_T)esGetAction(ES);
+    pktHdr.size=100;*/
+
     /*
      * Convert size to host format/host bytes & verify packet type.
      */
     Copy32BitsFromTarget(ES,
         (uint32_T *)&pktHdr, (char *)&pktHdr, NUM_HDR_ELS);
 
-    /*
-     * Hard coded- find out when this is supposed to happen. (probably
-     * above in ExtRecvIncomingPktHeader)
-     */
-    esSetAction(ES, EXT_GETPARAMS_RESPONSE);
-    pktHdr.type=(uint32_T)esGetAction(ES);
-    pktHdr.size=2048;
 
     assert(pktHdr.type == EXT_GETPARAMS_RESPONSE);
     if (!esIsErrorClear(ES))

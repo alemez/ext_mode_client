@@ -160,7 +160,7 @@ ExternalSim* ExtSimStructDef()
 	char modelName[100];
 	char fileName[100];
 	char line[256]; /*Line pointer to read in from file*/
-	int numDataTypes, numDataTypesLine=612;
+	//int numDataTypes, numDataTypesLine=612;
 	int i, count=0;
 
 	for(i=0; i<100; i++)
@@ -180,6 +180,7 @@ ExternalSim* ExtSimStructDef()
 			goto FILENAME;
 		}
 
+#ifdef HARDCODE
 		i=0;
 		while(fgets(line, sizeof(line), rtw)!=NULL)
 		{
@@ -201,8 +202,11 @@ ExternalSim* ExtSimStructDef()
 			else
 				count++;
 		}
+#endif
 
 	esSetModelName(es, modelName); /*given by user*/
+	esSetNumDataTypes(es, 14);	/*line 612 of test.rtw*/
+
 
 	/*Assuming thus far that these are the same for every model.*/
 	esSetVersion(es, (sizeof(ExternalSim)*10000 + 200));	/*EXTSIM_VERSION*/
@@ -227,14 +231,47 @@ ExternalSim* ExtSimStructDef()
  */
 void DisplayGetParams(ExternalSim *es)
 {
-
+	const char *pkt=esGetIncomingPktDataBuf(es);
+	int32_T    nParams;
+	int i;
+	for(i=0; i<esGetIncomingPktDataBufSize(es); i++){
+	(void)memcpy(&nParams, pkt, sizeof(int32_T));
+	printf("\n!! i:%d ,  %d", i, nParams);
+	pkt += sizeof(int32_T);
+	}
 }
 
 /*Function: UserSetParams===================================================
  * Abstract: Allows the user to change certain parameters
+ * 			set the commBuf
  */
 void UserSetParams(ExternalSim *es)
 {
+	int32_T param;
+	/*The array is as follows:
+	 * tmp[0]= number of parameters being changed
+	 * tmp[1]= data type transition index (B in ext_svr.c)
+	 * tmp[2]= starting offset data (S in ext_svr.c)
+	 * tmp[3]= number of elements for this parameter (W in ext_svr.c)
+	 * tmp[4]= index into rtw data type table (DI in ext_svr.c)
+	 * tmp[5]=
+	 * tmp[6]= the parameter value (in TARGET format)
+	 * tmp[7]=
+	 */
+	int32_T tmp[8]={1,0,4,1,0,0,1074266112,0};
+	printf("Please enter a sample time parameter value: ");
+	scanf("%d", &param);
+
+	/*
+	 * Must be in the "built in" data type format since
+	 * it gets converted in ext_svr.c
+	 */
+	tmp[6]=param;
+
+	char* pkt= malloc(sizeof(int32_T)*8);
+	(void)memcpy(pkt, &tmp, sizeof(int32_T)*8);
+
+	  esSetCommBuf(es, pkt);
 
 }
 
@@ -251,8 +288,8 @@ int main(void) {
 
 	ExternalSim  *ES;	/*Pointer to ExternalSim struct, to pass as args*/
 
-	char *buf= (char *)malloc(1064); /*The communication buffer*/
-	char *incomingBuf= (char *) malloc(2048); /*The incoming packet buffer */
+	char *buf= (char *)malloc(124); /*The communication buffer*/
+	char *incomingBuf= (char *) malloc(150); /*The incoming packet buffer */
 
 	if(buf==NULL)
 	{
@@ -281,10 +318,10 @@ int main(void) {
 
 
 	 esSetCommBuf(ES, buf);
-	 esSetCommBufSize(ES, 1064);	/* size of communication buffer - in host bytes */
+	 esSetCommBufSize(ES, 124);	/* size of communication buffer - in host bytes */
 	 ES->TargetDataInfo.dataTypeSizes=malloc(esGetNumDataTypes(ES)*sizeof(uint32_T));
 
-	 esSetIncomingPktDataBufSize(ES, 2048);
+	 esSetIncomingPktDataBufSize(ES, 150);
 	 esSetIncomingPktDataBuf(ES, incomingBuf); /*The buffer for incoming packets*/
 
 	 printf("\n!!!Starting the state machine!!!\n");
