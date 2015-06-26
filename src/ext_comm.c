@@ -772,11 +772,11 @@ PRIVATE void ExtGetParams(
 
     /*
      * EXT_GETPARAMS_RESPONSE should be set in ext_svr.c
-     * clearly then the target and client are not communicating
+     * clearly then the target and client are not communicating*/
 
     esSetAction(ES, EXT_GETPARAMS_RESPONSE);
     pktHdr.type=(uint32_T)esGetAction(ES);
-    pktHdr.size=100;*/
+    pktHdr.size=100;
 
     /*
      * Convert size to host format/host bytes & verify packet type.

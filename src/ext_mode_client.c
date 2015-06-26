@@ -14,6 +14,7 @@
 #include <sched.h>
 #include <unistd.h>
 #include <stdint.h>
+#include <math.h>
 
 #include "extsim.h"
 #include "extutil.h"
@@ -40,7 +41,7 @@ void* statemachine(void *es)
 	prhs[0]=NULL; /*not used*/
 
 	while (cur_state!=-1) {
-		printf("\nPlease enter a state [0..15] or -1 to quit");
+		printf("\n\nPlease enter a state [0..15] or -1 to quit");
 		fflush(stdout);
 		scanf("%hd", &cur_state);
 
@@ -51,10 +52,7 @@ void* statemachine(void *es)
 			esSetConnectionStatus(ES, EXTMODE_CONNECTED);
 			esClearError(ES);
 			ExtConnect(ES, nrhs, prhs);
-			if (esGetVerbosity(ES)) {
-				printf("\naction: EXT_CONNECT\n");
-				fflush(stdout);
-			}
+			InitialSetParams(ES, nrhs, prhs);
 			break;
 		case 1 :
 			printf("State 1 (EXT_DISCONNECT_REQUEST) will be processed\n");
@@ -242,36 +240,87 @@ void DisplayGetParams(ExternalSim *es)
 }
 
 /*Function: UserSetParams===================================================
- * Abstract: Allows the user to change certain parameters
- * 			set the commBuf
+ * Abstract: Allows the user to change certain parameters,
+ * 			sets the commBuf to the appropriate pkt
  */
 void UserSetParams(ExternalSim *es)
 {
-	int32_T param;
+	int64_T param;	//for conversion to built in data type
+	double DType; //User input
+	int32_T temp, temp2;
 	/*The array is as follows:
 	 * tmp[0]= number of parameters being changed
 	 * tmp[1]= data type transition index (B in ext_svr.c)
 	 * tmp[2]= starting offset data (S in ext_svr.c)
 	 * tmp[3]= number of elements for this parameter (W in ext_svr.c)
 	 * tmp[4]= index into rtw data type table (DI in ext_svr.c)
-	 * tmp[5]=
+	 * tmp[5]=0
 	 * tmp[6]= the parameter value (in TARGET format)
-	 * tmp[7]=
+	 * tmp[7]=0
 	 */
-	int32_T tmp[8]={1,0,4,1,0,0,1074266112,0};
-	printf("Please enter a sample time parameter value: ");
-	scanf("%d", &param);
+	int32_T tmpArr[]={1,0,4,1,0,0,1074266112,0};
+
+	/*Will have a menu or something that displays parameters
+	 * available to be changed. Maybe a key with integers
+	 * matching each block
+	printf("Please select the parameter you would like to change: ");
+	scanf("%d", &select);
+	tmp[2]=select;
+	 */
+
+	printf("\n\nPlease enter a sample time parameter value: ");
+	scanf("%lf", &DType);
 
 	/*
-	 * Must be in the "built in" data type format since
-	 * it gets converted in ext_svr.c
+	 * Convert user input param value from double to
+	 * 2 32-bit double precision integers to send in the pkt
+	 * 		-temp will almost always be zero (upper 32 bits)
+	 * 		-temp2 will probably contain all the bits needed for the
+	 * 		 correct precision (lower 32 bits)
 	 */
-	tmp[6]=param;
+	(void)memcpy(&param, &DType, 32);
+	temp=param;
+	temp2= param >> 32;
+
+	tmpArr[0]=1;	//updating 1 parameter
+	tmpArr[1]=0;
+	tmpArr[6]=temp2;
+
+	esSetCommBuf(es, NULL);
+	//free(esGetCommBuf(es));
 
 	char* pkt= malloc(sizeof(int32_T)*8);
-	(void)memcpy(pkt, &tmp, sizeof(int32_T)*8);
+	(void)memcpy(pkt, &tmpArr, sizeof(int32_T)*8);
 
+	  esSetCommBufSize(es, sizeof(tmpArr));
 	  esSetCommBuf(es, pkt);
+}
+
+void InitialSetParams(ExternalSim* es, int_T nrhs, const mxArray *prhs[])
+{
+	int32_T pktArr[]={5,0,0,1,0,0,1072693248,0,
+						1,1,0,0,1076101120, 0,2,
+						1,0,0,1075052544,0,3,1
+						,0,0,0,0,4,1,0,0,1074266112,0};
+
+	char* pkt= malloc(sizeof(int32_T)*32);
+	(void)memcpy(pkt, &pktArr, sizeof(int32_T)*32);
+
+	esSetCommBufSize(es, sizeof(pktArr));
+	esSetCommBuf(es, pkt);
+
+	esSetAction(es, EXT_SETPARAM);
+	ExtSendGenericPkt(es, nrhs, prhs);
+
+	/*
+	 * For some reason this is needed or the model will
+	 * run with bugs and you wont be able to change params after
+	 * running the model
+	 */
+	char* pkt2= malloc(sizeof(int32_T)*8);
+	(void)memcpy(pkt, &pktArr[9], sizeof(int32_T)*32);
+	esSetCommBufSize(es, sizeof(int32_T)*8);
+	esSetCommBuf(es, pkt2);
 
 }
 
@@ -288,7 +337,7 @@ int main(void) {
 
 	ExternalSim  *ES;	/*Pointer to ExternalSim struct, to pass as args*/
 
-	char *buf= (char *)malloc(124); /*The communication buffer*/
+	char *buf= (char *)malloc(500); /*The communication buffer*/
 	char *incomingBuf= (char *) malloc(150); /*The incoming packet buffer */
 
 	if(buf==NULL)
@@ -321,7 +370,7 @@ int main(void) {
 	 esSetCommBufSize(ES, 124);	/* size of communication buffer - in host bytes */
 	 ES->TargetDataInfo.dataTypeSizes=malloc(esGetNumDataTypes(ES)*sizeof(uint32_T));
 
-	 esSetIncomingPktDataBufSize(ES, 150);
+	 esSetIncomingPktDataBufSize(ES, 500);
 	 esSetIncomingPktDataBuf(ES, incomingBuf); /*The buffer for incoming packets*/
 
 	 printf("\n!!!Starting the state machine!!!\n");
