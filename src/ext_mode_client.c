@@ -407,8 +407,14 @@ void InitialSetParams(ExternalSim* es, int_T nrhs, const mxArray *prhs[])
      }//end while
 
 	char *paramValues[numParams][2];
-	char *tmp=malloc(100);
-	int count=0;
+	int count=0, j, k;
+
+	for(j=0; j<numParams; j++)
+		for(k=0; k<2; k++){
+			paramValues[j][k]=malloc(100);
+			if(paramValues[j][k]==NULL)
+				printf("\nError. Could not allocate memory");
+		}
 
 	while(1){
 		fscanf(rtw, "%s", fileReader);
@@ -422,38 +428,32 @@ void InitialSetParams(ExternalSim* es, int_T nrhs, const mxArray *prhs[])
 				{
 					fscanf(rtw, "%s", fileReader); //"Identifier" e.g. "PulseGenerator_Amp"
 					printf("\n A--> %s", fileReader);
-					(void)memcpy(tmp, fileReader, 100);
-					paramValues[count][0]=tmp;
-					printf("\n (%d, 0): %s", count, paramValues[count][0]);
+					(void)memcpy(paramValues[count][0], fileReader, 100);
 
 					fscanf(rtw, "%s", fileReader); //LogicalSrc
 					fscanf(rtw, "%s", fileReader); //LogicalSrc val
 					fscanf(rtw, "%s", fileReader); //Value ?
-					printf("\n --> %s", fileReader);
 
 					if(!strcmp(fileReader, "Value"))
 					{
 						fscanf(rtw, "%s", fileReader); //[value]
 						printf("\n A--> %s", fileReader);
-						(void)memcpy(tmp, fileReader, 100);
-						paramValues[count][1]=tmp;
+						(void)memcpy(paramValues[count][1], fileReader, 100);
 						count++;
 					}
 					else
 					{
-						paramValues[count][1]=0;
+						paramValues[count][1]="0";
 						count++;
 					}
-					if(count==7)
-						break;
+
 				}
 			}
+
 		}
-
+		if(count==7)
+			break;
 	}//end while
-
-	printf("\n (0, 0): %s", paramValues[0][0]);
-	printf("\n (0, 1): %s", paramValues[0][1]);
 
 
 	/*Commented out because .txt file is for a different model
