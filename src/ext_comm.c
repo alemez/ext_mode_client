@@ -63,6 +63,9 @@ PRIVATE boolean_T ExtRecvIncomingPktHeader(
     int       noDataCntr = 1000; /* determines if target exited unexpectedly. */
     boolean_T error      = EXT_NO_ERROR;
 
+
+    int i;
+
     /*
      * Loop until all bytes are received for the incoming packet header.
      * The packet header may not be read in one shot.
@@ -92,9 +95,22 @@ PRIVATE boolean_T ExtRecvIncomingPktHeader(
         /*
          * Get any pending data
          */
+        int32_T    nParams;//
+        int32_T *ptr;
+
         if (pending) {
             bufPtr = (char_T *)pktHdr + nBytes;
+
             error = ExtGetTargetPkt(ES,sizeof(PktHeader)-nBytes,&nGot,bufPtr);
+
+            //added
+            for(i=0; i<nGot; i++){
+            (void)memcpy(&nParams, bufPtr, sizeof(int32_T));
+            		printf("\nbuf ptr: %d", nParams);
+            		bufPtr+=sizeof(int32_T);
+            }//end added
+            bufPtr-=(sizeof(int32_T)*nGot);
+
             if (error) {
             	printf("\nExtGetTargetPkt() call failed while checking "
                            " target pkt header.");
@@ -771,12 +787,11 @@ PRIVATE void ExtGetParams(
     if (error) goto EXIT_POINT;
 
     /*
-     * EXT_GETPARAMS_RESPONSE should be set in ext_svr.c
-     * clearly then the target and client are not communicating*/
-
-    esSetAction(ES, EXT_GETPARAMS_RESPONSE);
-    pktHdr.type=(uint32_T)esGetAction(ES);
-    pktHdr.size=100;
+     * EXT_GETPARAMS_RESPONSE should be sent from ext_svr.c
+     * clearly then something is missing
+     */
+    pktHdr.type=EXT_GETPARAMS_RESPONSE;
+    pktHdr.size=80;
 
     /*
      * Convert size to host format/host bytes & verify packet type.
@@ -831,6 +846,7 @@ PRIVATE void ExtGetParams(
         bytesToGet -= nGot;
         assert(bytesToGet >= 0);
     }
+
 
 EXIT_POINT:
     return;

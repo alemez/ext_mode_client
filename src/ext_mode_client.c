@@ -2,9 +2,13 @@
  ============================================================================
  Name        : ext_mode_client.c
  Author      : Andrea Lemez
+ 	 	 	   Constantin Wiesner
  Version     : 1.0
  Copyright   : Your copyright notice
- Description : Hello World in C, Ansi-style
+ Description : Contains the main function and supporting functions
+ 	 	 	 	 to run the client and connect to the target. Supports
+ 	 	 	 	 parameter changing in real time (while the target is
+ 	 	 	 	 running). Requires a model and its .rtw file to run.
  ============================================================================
  */
 
@@ -30,6 +34,28 @@
 #define MAX_PRIO  (sched_get_priority_min(SCHED_FIFO) + 1)
 pthread_t statemachine_thread;
 
+
+/*Function: statemachine============================================
+ * Abstract:
+ * 	Asks the user what to do until -1 is entered. User chooses an option
+ * 	0 to 15 to control the model.
+ * 	(!)	0: Connect to target (!!!!must be selected first!!!!)
+ * 		1: Disconnect request
+ * 		2: Disconnect request no final upload
+ * 		3: Disconnect confirmed
+ * 		4: Set Param
+ * 		5: Get Param
+ * 		6: Select signals
+ * 		7: Select trigger
+ * 		8: Arm trigger
+ * 		9: Cancel logging
+ * 		10: Model start
+ * 		11: Model stop
+ * 		12: Model pause
+ * 		13: Model step
+ * 		14: Model continue
+ * 		15: Get time
+ */
 void* statemachine(void *es)
 {
 	short cur_state = 0;
@@ -155,11 +181,15 @@ ExternalSim* ExtSimStructDef()
 
 	ExternalSim *es=malloc(sizeof(ExternalSim));
 	FILE * rtw;
+	char * fileReader;
 	char modelName[100];
 	char fileName[100];
-	char line[256]; /*Line pointer to read in from file*/
-	//int numDataTypes, numDataTypesLine=612;
-	int i, count=0;
+	int numDataTypes;
+	int i=0;
+
+	fileReader=malloc(100);
+	if(fileReader==NULL)
+		printf("\nMemory not available");
 
 	for(i=0; i<100; i++)
 		modelName[i]='\0';
@@ -178,32 +208,21 @@ ExternalSim* ExtSimStructDef()
 			goto FILENAME;
 		}
 
-#ifdef HARDCODE
-		i=0;
-		while(fgets(line, sizeof(line), rtw)!=NULL)
-		{
-			if(count==numDataTypesLine-1)
-			{
-				printf("\n!! %s", line);
-				while(!isdigit(line[i]))
-					i++;
-				numDataTypes=line[i]-48; /*From ASCII char code to num*/
 
-				if(isdigit(line[i++]))
-				{
-					numDataTypes*=10;
-					numDataTypes= numDataTypes + (line[i]-48);
-				}
-				esSetNumDataTypes(es, numDataTypes);	/*line 612 of test.rtw*/
+		/*Find the number of data types indicated in the .rtw file*/
+		while(1){
+			fscanf(rtw, "%s", fileReader);
+			if(!strcmp(fileReader, "NumDataTypes"))
+			{
+				fscanf(rtw, "%s", fileReader);
+				sscanf(fileReader, "%d", &numDataTypes);
 				break;
 			}
-			else
-				count++;
 		}
-#endif
+
 
 	esSetModelName(es, modelName); /*given by user*/
-	esSetNumDataTypes(es, 14);	/*line 612 of test.rtw*/
+	esSetNumDataTypes(es, numDataTypes);	/*line 612 of test.rtw*/
 
 
 	/*Assuming thus far that these are the same for every model.*/
@@ -219,9 +238,43 @@ ExternalSim* ExtSimStructDef()
 	//esSetSizeOfTargetDataTypeFcn(es, fcn);
 	//esSetSizeOfDataTypeFcn(es, fcn);
 
-	fclose(rtw);
+
+
+/****************************************************************/
+	int COUNT=30, counter=0;
+	char *params[COUNT];
+
+	while(counter<=20){
+		fscanf(rtw, "%s", fileReader);
+		if(!strcmp(fileReader, "Parameter"))
+		{
+			fscanf(rtw, "%s", fileReader);
+			 if(!strcmp(fileReader, "{"))
+			 {
+				fscanf(rtw, "%s", fileReader);//Name
+				fscanf(rtw, "%s", fileReader);//"...."
+				//printf("\n-- %s", fileReader);
+				//add error checking for counter
+				//and grow function for the array
+				params[counter]=fileReader;
+				counter++;
+			 }
+		}
+	}
+
+/******************************************************************/
+
+
+
+
+	//fclose(rtw);
+	if(fclose(rtw)==EOF)
+		printf("\nError closing file");
+
+	free(fileReader);
+
 	return es;
-}
+}/*End ExtSimStructDef */
 
 /*Function: DisplayGetParams================================================
  * Abstract: Displays the parameter identifiers available in
@@ -229,14 +282,18 @@ ExternalSim* ExtSimStructDef()
  */
 void DisplayGetParams(ExternalSim *es)
 {
-	const char *pkt=esGetIncomingPktDataBuf(es);
+	const char* pkt=esGetIncomingPktDataBuf(es);
 	int32_T    nParams;
 	int i;
+
+
 	for(i=0; i<esGetIncomingPktDataBufSize(es); i++){
-	(void)memcpy(&nParams, pkt, sizeof(int32_T));
-	printf("\n!! i:%d ,  %d", i, nParams);
-	pkt += sizeof(int32_T);
+		(void)memcpy(&nParams, pkt, sizeof(int32_T));
+		printf("\nIncom Buf i:%d ,  %d", i, nParams);
+		pkt += sizeof(int32_T);
 	}
+
+
 }
 
 /*Function: UserSetParams===================================================
@@ -268,8 +325,9 @@ void UserSetParams(ExternalSim *es)
 	tmp[2]=select;
 	 */
 
-	printf("\n\nPlease enter a sample time parameter value: ");
-	scanf("%lf", &DType);
+
+		printf("\n\nPlease enter a sample time parameter value: ");
+		scanf("%lf", &DType);
 
 	/*
 	 * Convert user input param value from double to
@@ -282,26 +340,136 @@ void UserSetParams(ExternalSim *es)
 	temp=param;
 	temp2= param >> 32;
 
+	if(temp!=0)
+		printf("\n!!Attention 64 bit precision needed. 32 bit overflow!!");
+
 	tmpArr[0]=1;	//updating 1 parameter
 	tmpArr[1]=0;
 	tmpArr[6]=temp2;
 
 	esSetCommBuf(es, NULL);
-	//free(esGetCommBuf(es));
 
 	char* pkt= malloc(sizeof(int32_T)*8);
 	(void)memcpy(pkt, &tmpArr, sizeof(int32_T)*8);
 
 	  esSetCommBufSize(es, sizeof(tmpArr));
 	  esSetCommBuf(es, pkt);
-}
+}/*End UserSetParams*/
 
+
+/*Function: InitialSetParams==========================================
+ * Abstract: Sets the initial model values and conditions.
+ * 	Hardcoded for testSetParams
+ * 	Right now looks necessary for the commBuf to be set correctly
+ */
 void InitialSetParams(ExternalSim* es, int_T nrhs, const mxArray *prhs[])
 {
+	/*
+	 * Hard coded for the particular model testSetParam
+	 * pktArr[0]->Num parameters (model parameters)
+	 *
+	 * pktArr[6]->param value 1
+	 * pktArr[12]->param value 2
+	 * pktArr[18]->param value 3
+	 * 	...x(Num Params-1) ->param value n-1
+	 */
 	int32_T pktArr[]={5,0,0,1,0,0,1072693248,0,
 						1,1,0,0,1076101120, 0,2,
 						1,0,0,1075052544,0,3,1
 						,0,0,0,0,4,1,0,0,1074266112,0};
+
+	/*Reading from file*/
+	FILE *rtw;
+	char *fileReader;
+	int numParams;
+
+	rtw=fopen("test.txt", "r");
+	if(rtw==NULL)
+		printf("\nError, could not open file");
+
+	fileReader=malloc(100);
+		if(fileReader==NULL)
+			printf("\nMemory not available");
+
+	while(1){
+	 fscanf(rtw, "%s", fileReader);
+	   if(!strcmp(fileReader, "ModelParameters"))
+	   {
+		fscanf(rtw, "%s", fileReader);
+		  if(!strcmp(fileReader, "{"))
+		  {
+		  	fscanf(rtw, "%s", fileReader); //NumParameters
+		  	fscanf(rtw, "%s", fileReader);// #
+		  	numParams=atoi(fileReader);
+		  	break;
+		   }
+	   }
+     }//end while
+
+	char *paramValues[numParams][2];
+	char *tmp=malloc(100);
+	int count=0;
+
+	while(1){
+		fscanf(rtw, "%s", fileReader);
+		if(!strcmp(fileReader, "Parameter"))
+		{
+			fscanf(rtw, "%s", fileReader);
+			if(!strcmp(fileReader, "{"))
+			{
+				fscanf(rtw, "%s", fileReader);
+				if(!strcmp(fileReader, "Identifier"))
+				{
+					fscanf(rtw, "%s", fileReader); //"Identifier" e.g. "PulseGenerator_Amp"
+					printf("\n A--> %s", fileReader);
+					(void)memcpy(tmp, fileReader, 100);
+					paramValues[count][0]=tmp;
+					printf("\n (%d, 0): %s", count, paramValues[count][0]);
+
+					fscanf(rtw, "%s", fileReader); //LogicalSrc
+					fscanf(rtw, "%s", fileReader); //LogicalSrc val
+					fscanf(rtw, "%s", fileReader); //Value ?
+					printf("\n --> %s", fileReader);
+
+					if(!strcmp(fileReader, "Value"))
+					{
+						fscanf(rtw, "%s", fileReader); //[value]
+						printf("\n A--> %s", fileReader);
+						(void)memcpy(tmp, fileReader, 100);
+						paramValues[count][1]=tmp;
+						count++;
+					}
+					else
+					{
+						paramValues[count][1]=0;
+						count++;
+					}
+					if(count==7)
+						break;
+				}
+			}
+		}
+
+	}//end while
+
+	printf("\n (0, 0): %s", paramValues[0][0]);
+	printf("\n (0, 1): %s", paramValues[0][1]);
+
+
+	/*Commented out because .txt file is for a different model
+	pktArr[0]=numParams;
+	//allocate new array size depending on # of params
+	 int SIZE=(numParams *6) +1, i;
+	 int32_T temp[SIZE];
+	 for(i=0; i<=SIZE; i++){
+	 	temp[i]=pktArr[i];
+	  }
+	 */
+	free(fileReader);
+	fclose(rtw);
+	/*end*/
+
+
 
 	char* pkt= malloc(sizeof(int32_T)*32);
 	(void)memcpy(pkt, &pktArr, sizeof(int32_T)*32);
@@ -313,34 +481,33 @@ void InitialSetParams(ExternalSim* es, int_T nrhs, const mxArray *prhs[])
 	ExtSendGenericPkt(es, nrhs, prhs);
 
 	/*
+	 * Set the commBuf:
 	 * For some reason this is needed or the model will
 	 * run with bugs and you wont be able to change params after
 	 * running the model
 	 */
 	char* pkt2= malloc(sizeof(int32_T)*8);
-	(void)memcpy(pkt, &pktArr[9], sizeof(int32_T)*32);
 	esSetCommBufSize(es, sizeof(int32_T)*8);
 	esSetCommBuf(es, pkt2);
 
-}
+}/* End InitialSetParams*/
 
 
 /* Function: main =======================================================
  * Abstract:
  *    Main entry point for external communications processing.
- *    Hardcoded version
  */
 int main(void) {
 
 	printf("---Starting main---");
 	fflush(stdout);
 
-	ExternalSim  *ES;	/*Pointer to ExternalSim struct, to pass as args*/
+	ExternalSim  *ES;	/*Pointer to ExternalSim struct*/
 
-	char *buf= (char *)malloc(500); /*The communication buffer*/
-	char *incomingBuf= (char *) malloc(150); /*The incoming packet buffer */
+	char *buf= (char *)malloc(124); /*The communication buffer*/
+	char *incomingBuf= (char *) malloc(56); /*The incoming packet buffer */
 
-	if(buf==NULL)
+	if(buf==NULL|| incomingBuf==NULL)
 	{
 		printf("Error allocating memory for buffer");
 		fflush(stdout);
@@ -370,7 +537,7 @@ int main(void) {
 	 esSetCommBufSize(ES, 124);	/* size of communication buffer - in host bytes */
 	 ES->TargetDataInfo.dataTypeSizes=malloc(esGetNumDataTypes(ES)*sizeof(uint32_T));
 
-	 esSetIncomingPktDataBufSize(ES, 500);
+	 esSetIncomingPktDataBufSize(ES, 56);
 	 esSetIncomingPktDataBuf(ES, incomingBuf); /*The buffer for incoming packets*/
 
 	 printf("\n!!!Starting the state machine!!!\n");
