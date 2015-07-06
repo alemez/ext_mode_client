@@ -34,6 +34,11 @@
 #define MAX_PRIO  (sched_get_priority_min(SCHED_FIFO) + 1)
 pthread_t statemachine_thread;
 
+/*The name of the model .rtw/ .txt file
+ *for use in multiple functions
+ */
+char rtwFileName[100];
+
 
 /*Function: statemachine============================================
  * Abstract:
@@ -201,6 +206,8 @@ ExternalSim* ExtSimStructDef()
 		strcpy(fileName, modelName);
 		strcat(fileName, ".txt");
 
+		strcpy(rtwFileName, fileName);
+
 		rtw=fopen(fileName, "r");
 
 		if(rtw==NULL){
@@ -261,7 +268,6 @@ void DisplayGetParams(ExternalSim *es)
 		printf("\nIncom Buf i:%d ,  %d", i, nParams);
 		pkt += sizeof(int32_T);
 	}
-
 
 }
 
@@ -328,10 +334,13 @@ void UserSetParams(ExternalSim *es)
 /*Function: InitialSetParams==========================================
  * Abstract: Sets the initial model values and conditions.
  * 	Hardcoded for testSetParams
+ * 	Relies on the very specific format of the rtw files
  * 	Right now looks necessary for the commBuf to be set correctly
  */
 void InitialSetParams(ExternalSim* es, int_T nrhs, const mxArray *prhs[])
 {
+	printf("\n---InitialSetParams---");
+	fflush(stdout);
 	/*
 	 * Hard coded for the particular model testSetParam
 	 * pktArr[0]->Num parameters (model parameters)
@@ -348,13 +357,20 @@ void InitialSetParams(ExternalSim* es, int_T nrhs, const mxArray *prhs[])
 						1,1,0,0,1076101120, 0,2,
 						1,0,0,1075052544,0,3,1
 						,0,0,0,0,4,1,0,0,1074266112,0};
-
 	/*Reading from file*/
 	FILE *rtw;
 	char *fileReader;
 	int numParams;
+	/*2D Array that holds the parameter name and its corresponding
+		 *value (value stored as string but is type double)
+		 *	paramValues[0...numParams][0]= paramName
+		 *	paramValues[0...numParams][1]= InitialparamValue
+		 */
+	char *paramValues[numParams][2];
+	int count=0, j, k;
 
-	rtw=fopen("test.txt", "r");
+	rtw=fopen(rtwFileName, "r");
+
 	if(rtw==NULL)
 		printf("\nError, could not open file");
 
@@ -379,12 +395,8 @@ void InitialSetParams(ExternalSim* es, int_T nrhs, const mxArray *prhs[])
 	   }
      }//end while
 
-	/*Array that holds the parameter name and its corresponding
-	 * type double value
-	 */
-	char *paramValues[numParams][2];
-	int count=0, j, k;
 
+	/*Allocate memory space for the array */
 	for(j=0; j<numParams; j++)
 		for(k=0; k<2; k++){
 			paramValues[j][k]=malloc(100);
@@ -396,6 +408,9 @@ void InitialSetParams(ExternalSim* es, int_T nrhs, const mxArray *prhs[])
 	 * into a 2D array as such:
 	 * 		[ "ModelParameter Identifier" | [value] ]
 	 * 	Number of rows= Number of params
+	 * 	Note: if no value is given in the rtw file
+	 * 			corresponding to a parameter
+	 * 			the value is presumed to be 0
 	 */
 	while(1){
 		fscanf(rtw, "%s", fileReader);
@@ -436,19 +451,16 @@ void InitialSetParams(ExternalSim* es, int_T nrhs, const mxArray *prhs[])
 	}//end while
 
 
-	/*Commented out because .txt file is for a different model
-	pktArr[0]=numParams;
-	//allocate new array size depending on # of params
-	 int SIZE=(numParams *6) +1, i;
-	 int32_T temp[SIZE];
-	 for(i=0; i<=SIZE; i++){
-	 	temp[i]=pktArr[i];
-	  }
-	 */
-
 	free(fileReader);
 	fclose(rtw);
-	/*end*/
+	/*end reading from file*/
+
+	pktArr[0]=numParams;
+
+	/*allocate new array size depending on # of params*/
+
+	 /*Fill the new array with appropriate values*/
+	 //will have to convert double values to the IEEE values
 
 
 	char* pkt= malloc(sizeof(int32_T)*32);

@@ -541,7 +541,6 @@ PRIVATE void ExtConnect(
      */
     esSetRecvIncomingPktFcn(ES, ExtRecvIncomingPkt);
 
-    printf("\n!!swap bytes: %d", esGetSwapBytes(ES));
 
 EXIT_POINT:
     if (!esIsErrorClear(ES)) {
