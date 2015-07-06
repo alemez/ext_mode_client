@@ -187,7 +187,7 @@ ExternalSim* ExtSimStructDef()
 	int numDataTypes;
 	int i=0;
 
-	fileReader=malloc(100);
+	fileReader=malloc(90);
 	if(fileReader==NULL)
 		printf("\nMemory not available");
 
@@ -208,7 +208,6 @@ ExternalSim* ExtSimStructDef()
 			goto FILENAME;
 		}
 
-
 		/*Find the number of data types indicated in the .rtw file*/
 		while(1){
 			fscanf(rtw, "%s", fileReader);
@@ -220,10 +219,8 @@ ExternalSim* ExtSimStructDef()
 			}
 		}
 
-
 	esSetModelName(es, modelName); /*given by user*/
 	esSetNumDataTypes(es, numDataTypes);	/*line 612 of test.rtw*/
-
 
 	/*Assuming thus far that these are the same for every model.*/
 	esSetVersion(es, (sizeof(ExternalSim)*10000 + 200));	/*EXTSIM_VERSION*/
@@ -239,34 +236,6 @@ ExternalSim* ExtSimStructDef()
 	//esSetSizeOfDataTypeFcn(es, fcn);
 
 
-
-/****************************************************************/
-	int COUNT=30, counter=0;
-	char *params[COUNT];
-
-	while(counter<=20){
-		fscanf(rtw, "%s", fileReader);
-		if(!strcmp(fileReader, "Parameter"))
-		{
-			fscanf(rtw, "%s", fileReader);
-			 if(!strcmp(fileReader, "{"))
-			 {
-				fscanf(rtw, "%s", fileReader);//Name
-				fscanf(rtw, "%s", fileReader);//"...."
-				//printf("\n-- %s", fileReader);
-				//add error checking for counter
-				//and grow function for the array
-				params[counter]=fileReader;
-				counter++;
-			 }
-		}
-	}
-
-/******************************************************************/
-
-
-
-
 	//fclose(rtw);
 	if(fclose(rtw)==EOF)
 		printf("\nError closing file");
@@ -279,13 +248,13 @@ ExternalSim* ExtSimStructDef()
 /*Function: DisplayGetParams================================================
  * Abstract: Displays the parameter identifiers available in
  * 			 the model to the user
+ * 			 So far just displays the buffer contents
  */
 void DisplayGetParams(ExternalSim *es)
 {
 	const char* pkt=esGetIncomingPktDataBuf(es);
 	int32_T    nParams;
 	int i;
-
 
 	for(i=0; i<esGetIncomingPktDataBufSize(es); i++){
 		(void)memcpy(&nParams, pkt, sizeof(int32_T));
@@ -325,14 +294,13 @@ void UserSetParams(ExternalSim *es)
 	tmp[2]=select;
 	 */
 
-
 		printf("\n\nPlease enter a sample time parameter value: ");
 		scanf("%lf", &DType);
 
 	/*
 	 * Convert user input param value from double to
 	 * 2 32-bit double precision integers to send in the pkt
-	 * 		-temp will almost always be zero (upper 32 bits)
+	 * 		-temp for very precise values (upper 32 bits)
 	 * 		-temp2 will probably contain all the bits needed for the
 	 * 		 correct precision (lower 32 bits)
 	 */
@@ -367,11 +335,14 @@ void InitialSetParams(ExternalSim* es, int_T nrhs, const mxArray *prhs[])
 	/*
 	 * Hard coded for the particular model testSetParam
 	 * pktArr[0]->Num parameters (model parameters)
-	 *
+	 *		...
 	 * pktArr[6]->param value 1
+	 * 		...
 	 * pktArr[12]->param value 2
+	 * 		...
 	 * pktArr[18]->param value 3
-	 * 	...x(Num Params-1) ->param value n-1
+	 * 		...
+	 * 	pktArr[Num Params-1] ->param value n-1
 	 */
 	int32_T pktArr[]={5,0,0,1,0,0,1072693248,0,
 						1,1,0,0,1076101120, 0,2,
@@ -391,6 +362,8 @@ void InitialSetParams(ExternalSim* es, int_T nrhs, const mxArray *prhs[])
 		if(fileReader==NULL)
 			printf("\nMemory not available");
 
+	/*Gets the number of parameters
+	  from the modelName.rtw file*/
 	while(1){
 	 fscanf(rtw, "%s", fileReader);
 	   if(!strcmp(fileReader, "ModelParameters"))
@@ -406,6 +379,9 @@ void InitialSetParams(ExternalSim* es, int_T nrhs, const mxArray *prhs[])
 	   }
      }//end while
 
+	/*Array that holds the parameter name and its corresponding
+	 * type double value
+	 */
 	char *paramValues[numParams][2];
 	int count=0, j, k;
 
@@ -416,6 +392,11 @@ void InitialSetParams(ExternalSim* es, int_T nrhs, const mxArray *prhs[])
 				printf("\nError. Could not allocate memory");
 		}
 
+	/*Reads in model parameter names and values from modelName.rtw file
+	 * into a 2D array as such:
+	 * 		[ "ModelParameter Identifier" | [value] ]
+	 * 	Number of rows= Number of params
+	 */
 	while(1){
 		fscanf(rtw, "%s", fileReader);
 		if(!strcmp(fileReader, "Parameter"))
@@ -449,9 +430,8 @@ void InitialSetParams(ExternalSim* es, int_T nrhs, const mxArray *prhs[])
 
 				}
 			}
-
 		}
-		if(count==7)
+		if(count==numParams)
 			break;
 	}//end while
 
@@ -465,10 +445,10 @@ void InitialSetParams(ExternalSim* es, int_T nrhs, const mxArray *prhs[])
 	 	temp[i]=pktArr[i];
 	  }
 	 */
+
 	free(fileReader);
 	fclose(rtw);
 	/*end*/
-
 
 
 	char* pkt= malloc(sizeof(int32_T)*32);

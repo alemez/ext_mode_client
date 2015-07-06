@@ -1,10 +1,10 @@
 CompiledModel {
-  Name			  "test"
-  OrigName		  "test"
+  Name			  "testSetParam"
+  OrigName		  "testSetParam"
   Version		  "8.7 (R2014b) 08-Sep-2014"
   SimulinkVersion	  "8.4"
-  ModelVersion		  "1.16"
-  GeneratedOn		  "Fri May 29 11:19:58 2015"
+  ModelVersion		  "1.4"
+  GeneratedOn		  "Thu Jul  2 13:47:28 2015"
   HasSimStructVars	  0
   HasCodeVariants	  0
   PreserveExternInFcnDecls 1
@@ -24,7 +24,7 @@ CompiledModel {
   StandaloneSubsystemTesting 0
   PadderActive		  0
   DWorkAndBlockIOCombined 0
-  PrmModelName		  SLDataModelName(test)
+  PrmModelName		  SLDataModelName(testSetParam)
   UniqueFromFiles	  []
   UniqueToFiles		  []
   ErrorXMLMode		  0
@@ -42,53 +42,53 @@ CompiledModel {
     tTID		    "tid"
     tControlPortIdx	    "controlPortIdx"
     tChildModels	    "childModels"
-    tParametersType	    "P_test_T"
-    tBlockIOType	    "B_test_T"
-    tContStateType	    "X_test_T"
-    tXdotType		    "XDot_test_T"
-    tXdisType		    "XDis_test_T"
-    tXAbsTolType	    "CStateAbsTol_test_T"
-    tOutputType		    "ExtY_test_T"
-    tOutputSizeType	    "ExtYSize_test_T"
-    tDWorkType		    "DW_test_T"
-    tPrevZCStateType	    "PrevZCX_test_T"
-    tZCSignalValueType	    "ZCV_test_T"
-    tMassMatrixGlobalType   "MassMatrix_test_T"
-    tConstBlockIOType	    "ConstB_test_T"
-    tConstBlockIOTypeTag    "tag_ConstB_test_T"
-    tConstParamType	    "ConstP_test_T"
-    tConstParamWithInitType "ConstInitP_test_T"
-    tMachineLocalDataType   "MachLocal_test_T"
-    tDefaultParameters	    "test_DefaultP"
-    tBlockIO		    "test_B"
-    tContState		    "test_X"
-    tXdot		    "test_XDot"
-    tXdis		    "test_XDis"
-    tXAbsTol		    "test_XAbsTol"
-    tOutput		    "test_Y"
-    tOutputSize		    "test_YSize"
-    tDWork		    "test_DW"
-    tPrevZCState	    "test_PrevZCX"
-    tZCSignalValue	    "test_ZCV"
-    tMassMatrixGlobal	    "test_MassMatrix"
-    tODE8Const		    "test_NSTAGES"
-    tConstParamStruct	    "test_ConstP"
-    tConstParamWithInitStruct "test_ConstInitP"
-    tInvariantSignals	    "test_Invariant"
-    tMdlRefTimingBridge	    "test_TimingBrdg"
-    tMdlRefGlobalTID	    "test_GlobalTID"
-    tModelObject	    "test_Obj"
-    tMachineLocalData	    "test_MachLocal"
-    tInputType		    "ExtU_test_T"
-    tInputSizeType	    "ExtUSize_test_T"
-    tSimStructType	    "RT_MODEL_test_T"
-    tSimStructTypeTag	    "tag_RTM_test_T"
-    tInput		    "test_U"
-    tInputSize		    "test_USize"
-    tSimStruct		    "test_M"
-    tConstBlockIOStruct	    "test_ConstB"
-    tConstBlockIODefine	    "test_ConstB"
-    tParameters		    "test_P"
+    tParametersType	    "P_testSetParam_T"
+    tBlockIOType	    "B_testSetParam_T"
+    tContStateType	    "X_testSetParam_T"
+    tXdotType		    "XDot_testSetParam_T"
+    tXdisType		    "XDis_testSetParam_T"
+    tXAbsTolType	    "CStateAbsTol_testSetParam_T"
+    tOutputType		    "ExtY_testSetParam_T"
+    tOutputSizeType	    "ExtYSize_testSetParam_T"
+    tDWorkType		    "DW_testSetParam_T"
+    tPrevZCStateType	    "PrevZCX_testSetParam_T"
+    tZCSignalValueType	    "ZCV_testSetParam_T"
+    tMassMatrixGlobalType   "MassMatrix_testSetParam_T"
+    tConstBlockIOType	    "ConstB_testSetParam_T"
+    tConstBlockIOTypeTag    "tag_ConstB_testSetParam_T"
+    tConstParamType	    "ConstP_testSetParam_T"
+    tConstParamWithInitType "ConstInitP_testSetParam_T"
+    tMachineLocalDataType   "MachLocal_testSetParam_T"
+    tDefaultParameters	    "testSetParam_DefaultP"
+    tBlockIO		    "testSetParam_B"
+    tContState		    "testSetParam_X"
+    tXdot		    "testSetParam_XDot"
+    tXdis		    "testSetParam_XDis"
+    tXAbsTol		    "testSetParam_XAbsTol"
+    tOutput		    "testSetParam_Y"
+    tOutputSize		    "testSetParam_YSize"
+    tDWork		    "testSetParam_DW"
+    tPrevZCState	    "testSetParam_PrevZCX"
+    tZCSignalValue	    "testSetParam_ZCV"
+    tMassMatrixGlobal	    "testSetParam_MassMatrix"
+    tODE8Const		    "testSetParam_NSTAGES"
+    tConstParamStruct	    "testSetParam_ConstP"
+    tConstParamWithInitStruct "testSetParam_ConstInitP"
+    tInvariantSignals	    "testSetParam_Invariant"
+    tMdlRefTimingBridge	    "testSetParam_TimingBrdg"
+    tMdlRefGlobalTID	    "testSetParam_GlobalTID"
+    tModelObject	    "testSetParam_Obj"
+    tMachineLocalData	    "testSetParam_MachLocal"
+    tInputType		    "ExtU_testSetParam_T"
+    tInputSizeType	    "ExtUSize_testSetParam_T"
+    tSimStructType	    "RT_MODEL_testSetParam_T"
+    tSimStructTypeTag	    "tag_RTM_testSetParam_T"
+    tInput		    "testSetParam_U"
+    tInputSize		    "testSetParam_USize"
+    tSimStruct		    "testSetParam_M"
+    tConstBlockIOStruct	    "testSetParam_ConstB"
+    tConstBlockIODefine	    "testSetParam_ConstB"
+    tParameters		    "testSetParam_P"
   }
   ConfigSet {
     ActiveStateOutputEnumStorageType "Native Integer"
@@ -155,11 +155,11 @@ CompiledModel {
     EnableMemcpy	    1
     EnableParallelModelReferenceBuilds 0
     EnableUserReplacementTypes 0
-    EvaledLifeSpan	    rtInf
+    EvaledLifeSpan	    1.0
     ExpressionFolding	    1
     ExtMode		    1
     ExtModeIntrfLevel	    "Level1"
-    ExtModeMexArgs	    "'127.0.0.1' 1 17725"
+    ExtModeMexArgs	    ""
     ExtModeMexFile	    "ext_comm"
     ExtModeStaticAlloc	    0
     ExtModeStaticAllocSize  1000000
@@ -212,7 +212,7 @@ CompiledModel {
     InternalIdentifier	    "Shortened"
     IsERTTarget		    1
     LaunchReport	    0
-    LifeSpan		    "Inf"
+    LifeSpan		    "1"
     LocalBlockOutputs	    1
     LogVarNameModifier	    "rt_"
     MangleLength	    1
@@ -305,10 +305,10 @@ CompiledModel {
     SolverJacobianMethodControl	"auto"
     StateBitsets	    0
     StrengthReduction	    0
-    SupportAbsoluteTime	    1
-    SupportComplex	    1
+    SupportAbsoluteTime	    0
+    SupportComplex	    0
     SupportContinuousTime   0
-    SupportNonFinite	    1
+    SupportNonFinite	    0
     SupportNonInlinedSFcns  0
     SupportVariableSizeSignals 0
     SuppressErrorStatus	    0
@@ -399,7 +399,7 @@ CompiledModel {
       NonBusSignalsTreatedAsBus	"none"
       ParameterDowncastMsg    "error"
       ParameterOverflowMsg    "error"
-      ParameterPrecisionLossMsg	"warning"
+      PrecisionLossMsg	"warning"
       ParameterTunabilityLossMsg "warning"
       ParameterUnderflowMsg   "none"
       RTPrefix		      "error"
@@ -447,16 +447,16 @@ CompiledModel {
   Solver		  FixedStepDiscrete
   SolverType		  FixedStep
   StartTime		  0.0
-  StopTime		  rtInf
+  StopTime		  10.0
   LoadInitialState	  no
   SolverConsistencyChecking no
   SolverZeroCrossDetection Nonadaptive
-  LifeSpan		  rtInf
+  LifeSpan		  1.0
   SolverResetMethod	  fast
   SolverUpdateJacobianAtReset no
   FixedStepOpts {
-    SolverMode		    MultiTasking
-    FixedStep		    0.001
+    SolverMode		    SingleTasking
+    FixedStep		    0.5
     ExtrapolationOrder	    -1
     NumberNewtonIterations  -1
     TID01EQ		    0
@@ -478,25 +478,25 @@ CompiledModel {
     ModelReferenceTargetType "NONE"
     ProfileGenCode	    "0"
     ProtectCallInitFcnTwice "0"
-    RelativeBuildDir	    "test_ert_linux"
+    RelativeBuildDir	    "testSetParam_ert_linux"
     SelectCallback	    "ert_linux_select_callback_handler(hDlg, hSrc)"
     Version		    "1"
     matFileLogging	    "0"
     mdlRefHDLDir	    "hdl"
     mdlRefSimDir	    "sim"
     mdlRefTgtDir	    "ert_linux"
-    model		    "test"
+    model		    "testSetParam"
     parMdlRefCfgCheckFcn    "ert_linux_par_cfg_chk"
     relativePathToAnchor    ""
     tlcLanguage		    "C"
     tlcTargetType	    "RT"
   }
-  RTWContext		  [-1770168032, 32713]
+  RTWContext		  [1356317936, 32585]
   RTWCGIR		  1
   TLCBlkFcnInCGIR	  1
   SLCI			  off
   SubsystemHdlForRightClickBuild 0.0
-  LocalSharedCodeManagerFile "/home/control/simulink/targets/slprj/ert_linux/_sharedutils/shared_file.dmr"
+  LocalSharedCodeManagerFile "/home/control/MatLabProjects/ext_client/slprj/ert_linux/_sharedutils/shared_file.dmr"
   DataLoggingOpts {
     SaveFormat		    0
     MaxRows		    1000
@@ -506,13 +506,13 @@ CompiledModel {
     NumOutputSaveNames	    0
     StateSaveName	    ""
     FinalStateName	    ""
-    NumLoggedStates	    1
+    NumLoggedStates	    0
     SignalLoggingSaveFormat "Dataset"
     CompiledSignalLoggingSaveFormat "Dataset"
   }
   NumModelInputs	  0
   NumModelOutputs	  0
-  NumNonVirtBlocksInModel 5
+  NumNonVirtBlocksInModel 3
   DirectFeedthrough	  no
   NumContStates		  0
   ModelHasProjections	  no
@@ -523,8 +523,8 @@ CompiledModel {
   NumNonsampledZCs	  0
   NumZCEvents		  0
   ZCVectorlength	  0
-  NumBlockSignals	  3
-  NumBlockParams	  8
+  NumBlockSignals	  2
+  NumBlockParams	  5
   NumAlgebraicLoops	  0
   HasRootTriggerPort	  no
   HasRootEnablePort	  no
@@ -539,12 +539,11 @@ CompiledModel {
   NumSimulinkFunctions	  0
   PositivePriority	  no
   ConcurrentTasks	  no
-  SingleTimeDomainApplication "ClockDomain {\n_task1 : { \nSampleTime [0.01, 0]\n }\n_task0 : { \nSampleTime [0.001, 0"
-  "]\n }\n }\n"
+  SingleTimeDomainApplication "ClockDomain {\n_task0 : { \nSampleTime [0.5, 0]\n }\n }\n"
   AllSampleTimesInherited no
   ModelSampleTimeInheritanceDetails {
     AllowedOverall	    no
-    IsMultiRate		    yes
+    IsMultiRate		    no
     NeedsAbsTime	    no
     HasPreSetSampleTimes    yes
     HasContinuousTs	    no
@@ -553,61 +552,40 @@ CompiledModel {
     ConstInterfaceNonConstContents no
     InheritanceForcedForFcnCall	no
   }
-  NumTasks		  2
+  NumTasks		  1
   ModelRefTsInheritance	  DISALLOW_SAMPLE_TIME_INHERITANCE
   HasNonVirtualConstantTs no
   FixedStepSizeBasedOnHeuristic	no
   InvariantConstants	  no
-  FundamentalStepSize	  0.001
-  SingleRate		  no
-  NumSampleTimes	  2
+  FundamentalStepSize	  0.5
+  SingleRate		  yes
+  NumSampleTimes	  1
   SampleTime {
     TaskIdx		    0
     TID			    0
     PriorityAssigned	    yes
     Priority		    40
-    PeriodAndOffset	    [0.001, 0.0]
+    PeriodAndOffset	    [0.5, 0.0]
     Asynchronous	    no
     IsUnionTs		    no
     IsVirtualTs		    no
     TimeSource		    Self_internal
     AsyncPromotedTID	    0
     TimerUpdateCode	    ""
-    ClockTickStepSize	    0.001
+    ClockTickStepSize	    0.5
     NeedAbsoluteTime	    yes
     IsInlined		    no
     NeedFloatTime	    yes
-    ClockTickDataTypeId	    13
+    ClockTickDataTypeId	    7
     ClockTickDataTypeAtomic 0
     TaskCounterDataTypeId   3
     TaskName		    "_task0"
   }
-  SampleTime {
-    TaskIdx		    1
-    TID			    1
-    PriorityAssigned	    yes
-    Priority		    41
-    PeriodAndOffset	    [0.01, 0.0]
-    Asynchronous	    no
-    IsUnionTs		    no
-    IsVirtualTs		    no
-    TimeSource		    Self_internal
-    AsyncPromotedTID	    1
-    TimerUpdateCode	    ""
-    ClockTickStepSize	    0.01
-    NeedAbsoluteTime	    yes
-    IsInlined		    no
-    NeedFloatTime	    no
-    ClockTickDataTypeId	    13
-    ClockTickDataTypeAtomic 0
-    TaskCounterDataTypeId   3
-    TaskName		    "_task1"
-  }
   NumVariableSampleTimes  0
   NumAsynchronousSampleTimes 0
-  NumSynchronousSampleTimes 2
+  NumSynchronousSampleTimes 1
   HasBlocksWithDiscreteSampleTime yes
-  MdlGenPeriodicRateGroupingCode yes
+  MdlGenPeriodicRateGroupingCode no
   DataTypes {
     NumDataTypes	    14
     NumSLBuiltInDataTypes   9
@@ -813,21 +791,22 @@ CompiledModel {
     HasObject		    0
   }
   HasEcoderProperties	  0
-  NumBlockTypeCounts	  4
+  NumBlockTypeCounts	  3
   BlockTypeCount {
-    Type		    "RateTransition"
+    Type		    "Scope"
     Count		    1
   }
   BlockTypeCount {
-    Type		    "Scope"
-    Count		    2
-  }
-  BlockTypeCount {
-    Type		    "DiscreteFilter"
+    Type		    "S-Function"
     Count		    1
   }
   BlockTypeCount {
     Type		    "DiscretePulseGenerator"
+    Count		    1
+  }
+  NumSFunctionNameCounts  1
+  SFunctionNameCount {
+    Name		    "PRINT_PARAM"
     Count		    1
   }
   BlockHierarchyMap {
@@ -929,11 +908,11 @@ CompiledModel {
     }
     Subsystem {
       Name		      "<Root>"
-      SLName		      "test"
+      SLName		      "testSetParam"
       Type		      root
       SubsystemBlockIndex     [-1, -1]
       NVOwnerSysIdx	      0
-      NumBlocks		      5
+      NumBlocks		      3
       Block {
 	Name			"<Root>/Pulse Generator"
 	SLName			"Pulse\nGenerator"
@@ -943,22 +922,22 @@ CompiledModel {
 	  Name			  "Amplitude"
 	  SLName		  "Amplitude"
 	  _idx			  0
-	  String		  "2"
+	  String		  "1"
 	  StringType		  "Expression"
 	}
 	Parameter {
 	  Name			  "Period"
 	  SLName		  "Period"
 	  _idx			  1
-	  String		  ""
-	  StringType		  "Computed"
+	  String		  "10"
+	  StringType		  "Expression"
 	}
 	Parameter {
 	  Name			  "PulseWidth"
 	  SLName		  "PulseWidth"
 	  _idx			  2
-	  String		  ""
-	  StringType		  "Computed"
+	  String		  "5"
+	  StringType		  "Expression"
 	}
 	Parameter {
 	  Name			  "PhaseDelay"
@@ -970,73 +949,34 @@ CompiledModel {
 	NumParameters		4
 	NumDiscStates		0
 	DWork {
-	  _idx			  4
+	  _idx			  1
 	}
 	NumDWorks		1
-      }
-      Block {
-	Name			"<Root>/Rate Transition"
-	SLName			"Rate Transition"
-	SID			"3"
-	Type			RateTransition
       }
       Block {
 	Name			"<Root>/Scope"
 	SLName			"Scope"
-	SID			"2"
+	SID			"3"
 	Type			Scope
 	NumDiscStates		0
 	DWork {
-	  _idx			  2
-	}
-	NumDWorks		1
-      }
-      Block {
-	Name			"<Root>/Scope1"
-	SLName			"Scope1"
-	SID			"4"
-	Type			Scope
-	NumDiscStates		0
-	DWork {
-	  _idx			  3
-	}
-	NumDWorks		1
-      }
-      Block {
-	Name			"<Root>/Discrete Filter"
-	SLName			"Discrete Filter"
-	SID			"5"
-	Type			DiscreteFilter
-	Parameter {
-	  Name			  "Numerator"
-	  SLName		  "Numerator"
-	  _idx			  4
-	  String		  "[1]"
-	  StringType		  "Expression"
-	}
-	Parameter {
-	  Name			  "Denominator"
-	  SLName		  "Denominator"
-	  _idx			  5
-	  String		  "[1 0.5]"
-	  StringType		  "Expression"
-	}
-	Parameter {
-	  Name			  "InitialStates"
-	  SLName		  "InitialStates"
-	  _idx			  6
-	  String		  "0"
-	  StringType		  "Expression"
-	}
-	NumParameters		3
-	DiscState {
 	  _idx			  0
 	}
-	NumDiscStates		1
-	DWork {
-	  _idx			  1
-	}
 	NumDWorks		1
+      }
+      Block {
+	Name			"<Root>/S-Function"
+	SLName			"S-Function"
+	SID			"2"
+	Type			"S-Function"
+	Parameter {
+	  Name			  "p1"
+	  SLName		  "p1"
+	  _idx			  4
+	  String		  "2"
+	  StringType		  "Expression"
+	}
+	NumParameters		1
       }
     }
     NumSubsystems	    1
@@ -1293,8 +1233,8 @@ CompiledModel {
       TID		      0
       SysNum		      0
     }
-    NumGlobalBlockOutputs   3
-    NumLocalBlockOutputs    0
+    NumGlobalBlockOutputs   1
+    NumLocalBlockOutputs    1
     NumExternalBlockOutputs 0
     NumConstBlockOutputs    0
     NumConstOutputExpr	    0
@@ -1302,22 +1242,15 @@ CompiledModel {
       VarGroupIdx	      [0, 0]
       LogicalSrc	      B0
       TestPoint		      yes
-      GrSrc		      [0, 0, 0, -1]
-      SigSrc		      [0, -1, 2, -1]
+      GrSrc		      [0, 2, 0, -1]
+      SigSrc		      [0, -1, 0, 0]
     }
-    GlobalBlockOutput {
-      VarGroupIdx	      [0, 1]
-      TID		      1
+    LocalBlockOutput {
+      Identifier	      "rtb_PulseGenerator"
+      SysCsIdx		      [0, -1]
       LogicalSrc	      B1
-      GrSrc		      [0, 1, 0, -1]
-      SigSrc		      [0, -1, 2, -1]
-    }
-    GlobalBlockOutput {
-      VarGroupIdx	      [0, 2]
-      TID		      1
-      LogicalSrc	      B2
-      TestPoint		      yes
-      GrSrc		      [0, 4, 0, -1]
+      SigDeclSysIdx	      0
+      GrSrc		      [0, 0, 0, -1]
       SigSrc		      [0, -1, 2, -1]
     }
   }
@@ -1374,51 +1307,22 @@ CompiledModel {
       ForEachNumberOfIters    0
       InitInStart	      0
     }
-    NumDWorks		    5
-    NumNonLocalDWorks	    5
+    NumDWorks		    2
+    NumNonLocalDWorks	    2
     DWork {
       VarGroupIdx	      [1, 0]
-      Name		      "states"
+      CGTypeIdx		      11
+      Name		      "PWORK"
       LogicalSrc	      D0
-      UsedAs		      "DSTATE"
-      DataLoggingOn	      1
-      GrSrc		      [0, 4]
-      SigSrc		      [0, -1, 2, 1]
-      TID		      1
-    }
-    DWork {
-      SysCsIdx		      [0, -1]
-      Identifier	      "DiscreteFilter_tmp"
-      Name		      "tmp"
-      LogicalSrc	      D1
-      GrSrc		      [0, 4]
-      SigSrc		      [0, -1, 2, 2]
-      TID		      1
+      Origin		      "PWORK"
+      GrSrc		      [0, 1]
+      SigSrc		      [0, -1, 1, 0]
     }
     DWork {
       VarGroupIdx	      [1, 1]
-      CGTypeIdx		      11
-      Name		      "PWORK"
-      LogicalSrc	      D2
-      Origin		      "PWORK"
-      GrSrc		      [0, 2]
-      SigSrc		      [0, -1, 0, 0]
-    }
-    DWork {
-      VarGroupIdx	      [1, 2]
-      CGTypeIdx		      11
-      Name		      "PWORK"
-      LogicalSrc	      D3
-      Origin		      "PWORK"
-      GrSrc		      [0, 3]
-      SigSrc		      [0, -1, 1, 0]
-      TID		      1
-    }
-    DWork {
-      VarGroupIdx	      [1, 3]
       CGTypeIdx		      6
       Name		      "Counter"
-      LogicalSrc	      D4
+      LogicalSrc	      D1
       GrSrc		      [0, 0]
       SigSrc		      [0, -1, 2, 0]
     }
@@ -1515,7 +1419,7 @@ CompiledModel {
     ArgDefIdx		    -1
     MemoryMapIdx	    [-1, -1, -1]
     OriginalDataTypeIdx	    0
-    CGTypeIdx		    22
+    CGTypeIdx		    20
     Tunable		    on
     OrigIdentifier	    ""
     StorageClass	    Auto
@@ -1648,8 +1552,8 @@ CompiledModel {
     Alignment		    -1
   }
   ModelParameters {
-    NumParameters	    7
-    NumInrtP		    7
+    NumParameters	    5
+    NumInrtP		    5
     NumConstPrmsWithInit    0
     NumConstPrms	    0
     NumExportedGlobal	    0
@@ -1665,7 +1569,7 @@ CompiledModel {
       MemoryMapIdx	      [-1, -1, -1]
       HasObject		      0
       OriginalDataTypeIdx     0
-      CGTypeIdx		      22
+      CGTypeIdx		      20
       WorkspaceVarName	      ""
       IsPseudoWorkspaceVar    no
       Tunable		      yes
@@ -1691,8 +1595,8 @@ CompiledModel {
     Parameter {
       Identifier	      "PulseGenerator_Amp"
       LogicalSrc	      P0
-      Value		      [2.0]
-      ContainerCGTypeIdx      23
+      Value		      [1.0]
+      ContainerCGTypeIdx      21
       ReferencedBy	      Matrix(1,4)
 [[0, -1, 2, 0];]
       GraphicalRef	      Matrix(1,2)
@@ -1704,8 +1608,8 @@ CompiledModel {
     Parameter {
       Identifier	      "PulseGenerator_Period"
       LogicalSrc	      P1
-      Value		      [1000.0]
-      CGTypeIdx		      0
+      Value		      [10.0]
+      ContainerCGTypeIdx      21
       ReferencedBy	      Matrix(1,4)
 [[0, -1, 2, 1];]
       GraphicalRef	      Matrix(1,2)
@@ -1717,8 +1621,8 @@ CompiledModel {
     Parameter {
       Identifier	      "PulseGenerator_Duty"
       LogicalSrc	      P2
-      Value		      [50.0]
-      CGTypeIdx		      0
+      Value		      [5.0]
+      ContainerCGTypeIdx      21
       ReferencedBy	      Matrix(1,4)
 [[0, -1, 2, 2];]
       GraphicalRef	      Matrix(1,2)
@@ -1730,7 +1634,7 @@ CompiledModel {
     Parameter {
       Identifier	      "PulseGenerator_PhaseDelay"
       LogicalSrc	      P3
-      ContainerCGTypeIdx      23
+      ContainerCGTypeIdx      21
       ReferencedBy	      Matrix(1,4)
 [[0, -1, 2, 3];]
       GraphicalRef	      Matrix(1,2)
@@ -1739,41 +1643,15 @@ CompiledModel {
       OwnerSysIdx	      [0, -1]
     }
     Parameter {
-      Identifier	      "DiscreteFilter_NumCoef"
+      Identifier	      "SFunction_p1"
       LogicalSrc	      P4
-      Value		      [1.0]
-      ContainerCGTypeIdx      23
+      Value		      [2.0]
+      ContainerCGTypeIdx      21
       ReferencedBy	      Matrix(1,4)
-[[0, -1, 2, 4];]
+[[0, -1, 0, 0];]
       GraphicalRef	      Matrix(1,2)
-[[0, 4];]
+[[0, 2];]
       BHMPrmIdx		      0
-      OwnerSysIdx	      [0, -1]
-      WasAccessedAsVariable   1
-    }
-    Parameter {
-      Identifier	      "DiscreteFilter_DenCoef"
-      LogicalSrc	      P5
-      Value		      [1.0, 0.5]
-      CGTypeIdx		      18
-      ContainerCGTypeIdx      17
-      ReferencedBy	      Matrix(1,4)
-[[0, -1, 2, 5];]
-      GraphicalRef	      Matrix(1,2)
-[[0, 4];]
-      BHMPrmIdx		      1
-      OwnerSysIdx	      [0, -1]
-      WasAccessedAsVariable   1
-    }
-    Parameter {
-      Identifier	      "DiscreteFilter_InitialStates"
-      LogicalSrc	      P6
-      ContainerCGTypeIdx      23
-      ReferencedBy	      Matrix(1,4)
-[[0, -1, 2, 6];]
-      GraphicalRef	      Matrix(1,2)
-[[0, 4];]
-      BHMPrmIdx		      2
       OwnerSysIdx	      [0, -1]
       WasAccessedAsVariable   1
     }
@@ -1787,27 +1665,27 @@ CompiledModel {
   DataObjectUsage {
     NumFiles		    [5]
     File {
-      Name		      "test"
+      Name		      "testSetParam"
       Type		      "source"
       IsCustom		      "no"
     }
     File {
-      Name		      "test"
+      Name		      "testSetParam"
       Type		      "header"
       IsCustom		      "no"
     }
     File {
-      Name		      "test_data"
+      Name		      "testSetParam_data"
       Type		      "source"
       IsCustom		      "no"
     }
     File {
-      Name		      "test_types"
+      Name		      "testSetParam_types"
       Type		      "header"
       IsCustom		      "no"
     }
     File {
-      Name		      "test_private"
+      Name		      "testSetParam_private"
       Type		      "header"
       IsCustom		      "no"
     }
@@ -1838,11 +1716,7 @@ CompiledModel {
     VirtualOutportStartHeader ""
     InitializeHeader	    ""
     OutputHeader	    ""
-    OutputHeader0	    ""
-    OutputHeader1	    ""
     UpdateHeader	    ""
-    UpdateHeader0	    ""
-    UpdateHeader1	    ""
     DerivativeHeader	    ""
     ProjectionHeader	    ""
     ForcingFunctionHeader   ""
@@ -1857,17 +1731,11 @@ CompiledModel {
     ModelPrevZCStateInitHeader ""
     ConstCodeHeader	    ""
     OutputUpdateHeader	    ""
-    OutputUpdateHeader0	    ""
-    OutputUpdateHeader1	    ""
     StartBody		    ""
     VirtualOutportStartBody ""
     InitializeBody	    ""
     OutputBody		    ""
-    OutputBody0		    ""
-    OutputBody1		    ""
     UpdateBody		    ""
-    UpdateBody0		    ""
-    UpdateBody1		    ""
     DerivativeBody	    ""
     ProjectionBody	    ""
     ForcingFunctionBody	    ""
@@ -1882,17 +1750,11 @@ CompiledModel {
     ModelPrevZCStateInitBody ""
     ConstCodeBody	    ""
     OutputUpdateBody	    ""
-    OutputUpdateBody0	    ""
-    OutputUpdateBody1	    ""
     StartTrailer	    ""
     VirtualOutportStartTrailer ""
     InitializeTrailer	    ""
     OutputTrailer	    ""
-    OutputTrailer0	    ""
-    OutputTrailer1	    ""
     UpdateTrailer	    ""
-    UpdateTrailer0	    ""
-    UpdateTrailer1	    ""
     DerivativeTrailer	    ""
     ProjectionTrailer	    ""
     ForcingFunctionTrailer  ""
@@ -1907,17 +1769,11 @@ CompiledModel {
     ModelPrevZCStateInitTrailer	""
     ConstCodeTrailer	    ""
     OutputUpdateTrailer	    ""
-    OutputUpdateTrailer0    ""
-    OutputUpdateTrailer1    ""
     StartCacheAssert	    0
     VirtualOutportStartCacheAssert 0
     InitializeCacheAssert   0
     OutputCacheAssert	    0
-    OutputCacheAssert0	    0
-    OutputCacheAssert1	    0
     UpdateCacheAssert	    0
-    UpdateCacheAssert0	    0
-    UpdateCacheAssert1	    0
     DerivativeCacheAssert   0
     ProjectionCacheAssert   0
     ForcingFunctionCacheAssert 0
@@ -1932,17 +1788,11 @@ CompiledModel {
     ModelPrevZCStateInitCacheAssert 0
     ConstCodeCacheAssert    0
     OutputUpdateCacheAssert 0
-    OutputUpdateCacheAssert0 0
-    OutputUpdateCacheAssert1 0
     CachedStartFcn	    ""
     CachedVirtualOutportStartFcn ""
     CachedInitializeFcn	    ""
     CachedOutputFcn	    ""
-    CachedOutput0Fcn	    ""
-    CachedOutput1Fcn	    ""
     CachedUpdateFcn	    ""
-    CachedUpdate0Fcn	    ""
-    CachedUpdate1Fcn	    ""
     CachedDerivativeFcn	    ""
     CachedProjectionFcn	    ""
     CachedForcingFunctionFcn ""
@@ -1957,17 +1807,11 @@ CompiledModel {
     CachedModelPrevZCStateInitFcn ""
     CachedConstCodeFcn	    ""
     CachedOutputUpdateFcn   ""
-    CachedOutputUpdate0Fcn  ""
-    CachedOutputUpdate1Fcn  ""
     CachedStartSSVars	    ""
     CachedVirtualOutportStartSSVars ""
     CachedInitializeSSVars  ""
     CachedOutputSSVars	    ""
-    CachedOutput0SSVars	    ""
-    CachedOutput1SSVars	    ""
     CachedUpdateSSVars	    ""
-    CachedUpdate0SSVars	    ""
-    CachedUpdate1SSVars	    ""
     CachedDerivativeSSVars  ""
     CachedProjectionSSVars  ""
     CachedForcingFunctionSSVars	""
@@ -1982,17 +1826,11 @@ CompiledModel {
     CachedModelPrevZCStateInitSSVars ""
     CachedConstCodeSSVars   ""
     CachedOutputUpdateSSVars ""
-    CachedOutputUpdate0SSVars ""
-    CachedOutputUpdate1SSVars ""
     CachedStartGlobalVars   ""
     CachedVirtualOutportStartGlobalVars	""
     CachedInitializeGlobalVars ""
     CachedOutputGlobalVars  ""
-    CachedOutput0GlobalVars ""
-    CachedOutput1GlobalVars ""
     CachedUpdateGlobalVars  ""
-    CachedUpdate0GlobalVars ""
-    CachedUpdate1GlobalVars ""
     CachedDerivativeGlobalVars ""
     CachedProjectionGlobalVars ""
     CachedForcingFunctionGlobalVars ""
@@ -2007,17 +1845,11 @@ CompiledModel {
     CachedModelPrevZCStateInitGlobalVars ""
     CachedConstCodeGlobalVars ""
     CachedOutputUpdateGlobalVars ""
-    CachedOutputUpdate0GlobalVars ""
-    CachedOutputUpdate1GlobalVars ""
     CachedStartLocalBO	    ""
     CachedVirtualOutportStartLocalBO ""
     CachedInitializeLocalBO ""
     CachedOutputLocalBO	    ""
-    CachedOutput0LocalBO    ""
-    CachedOutput1LocalBO    ""
     CachedUpdateLocalBO	    ""
-    CachedUpdate0LocalBO    ""
-    CachedUpdate1LocalBO    ""
     CachedDerivativeLocalBO ""
     CachedProjectionLocalBO ""
     CachedForcingFunctionLocalBO ""
@@ -2032,17 +1864,11 @@ CompiledModel {
     CachedModelPrevZCStateInitLocalBO ""
     CachedConstCodeLocalBO  ""
     CachedOutputUpdateLocalBO ""
-    CachedOutputUpdate0LocalBO ""
-    CachedOutputUpdate1LocalBO ""
     CachedStartLocalVars    ""
     CachedVirtualOutportStartLocalVars ""
     CachedInitializeLocalVars ""
     CachedOutputLocalVars   ""
-    CachedOutput0LocalVars  ""
-    CachedOutput1LocalVars  ""
     CachedUpdateLocalVars   ""
-    CachedUpdate0LocalVars  ""
-    CachedUpdate1LocalVars  ""
     CachedDerivativeLocalVars ""
     CachedProjectionLocalVars ""
     CachedForcingFunctionLocalVars ""
@@ -2057,8 +1883,6 @@ CompiledModel {
     CachedModelPrevZCStateInitLocalVars	""
     CachedConstCodeLocalVars ""
     CachedOutputUpdateLocalVars	""
-    CachedOutputUpdate0LocalVars ""
-    CachedOutputUpdate1LocalVars ""
     CachedStartProfileDeclsCode	""
     CachedVirtualOutportStartProfileDeclsCode ""
     CachedInitializeProfileDeclsCode ""
@@ -2119,9 +1943,6 @@ CompiledModel {
     Output0Fcn		    ""
     Update0Fcn		    ""
     OutputUpdate0Fcn	    ""
-    Output1Fcn		    ""
-    Update1Fcn		    ""
-    OutputUpdate1Fcn	    ""
     CachedConstCodeLocalVars ""
     CachedSubFunctions	    ""
     CachedStateflowFcnCode  ""
@@ -2270,7 +2091,7 @@ CompiledModel {
   }
   CanonicalPrmArgDefDefaults {
     OriginalDataTypeIdx	    0
-    CGTypeIdx		    22
+    CGTypeIdx		    20
     IsUsed		    yes
     DeclareAsPointer	    no
   }
@@ -2278,7 +2099,7 @@ CompiledModel {
   System {
     Type		    "root"
     Name		    "<Root>"
-    Identifier		    "test"
+    Identifier		    "testSetParam"
     RTWSystemCode	    2
     IsService		    0
     IsPublic		    0
@@ -2300,21 +2121,21 @@ CompiledModel {
     Interface {
       NumCanonicalInputArgDefs 0
       BlockIOArgDef {
-	NumFlatFields		3
+	NumFlatFields		1
       }
       ConstBlockIOArgDef {
       }
       NumCanonicalOutputArgDefs	0
       ParameterArgDef {
 	FirstLocation		0
-	NumFlatFields		7
+	NumFlatFields		5
 	PassthroughSystemIdx	-1
       }
       DWorkArgDef {
-	NumFlatFields		5
+	NumFlatFields		2
       }
       LocalSDWorkArgDef {
-	FirstLocation		5
+	FirstLocation		2
       }
       ContStatesArgDef {
       }
@@ -2335,6 +2156,7 @@ CompiledModel {
     }
     Variables {
       LocalBlockIODef {
+	NumFlatFields		1
       }
       ExternBlockIODef {
       }
@@ -2352,13 +2174,13 @@ CompiledModel {
     IncludedReusableParentSystemIdx []
     IncludedReusableParentHeaderFiles []
     NumIncludedModelReference 0
-    SystemFileName	    "test"
+    SystemFileName	    "testSetParam"
     NumBlocks		    3
     NumVirtualOutportBlocks 0
     VirtualOutportBlocksIdx 3
     NumTotalBlocks	    3
     Block {
-      Type		      Scope
+      Type		      "S-Function"
       UseTLC		      1
       BlockIdx		      [0, 0, 0]
       SL_BlockIdx	      1
@@ -2367,15 +2189,94 @@ CompiledModel {
       }
       ExprCommentSrcIdx {
       }
+      Name		      "<Root>/S-Function"
+      Identifier	      "SFunction"
+      TID		      0
+      firstEntryOfTsMapIsGCD  yes
+      RollRegions	      [0]
+      NumDataInputPorts	      1
+      DataInputPort {
+	SignalSrc		[L0]
+	SignalRegion		[0@1]
+	RollRegions		[0]
+      }
+      DataOutputPort {
+	SignalSrc		[b0]
+      }
+      Connections {
+	InputPortContiguous	[yes]
+	InputPortConnected	[yes]
+	OutputPortConnected	[yes]
+	OutputPortBeingMerged	[no]
+	DirectSrcConn		[yes]
+	DirectDstConn		[yes]
+	DataOutputPort {
+	  NumConnPoints		  1
+	  ConnPoint {
+	    SrcSignal		    [-1, 0, 1]
+	    DstBlockAndPortEl	    [0, 1, 0, 0]
+	  }
+	}
+      }
+      ParamSettings {
+	FunctionName		PRINT_PARAM
+	FunctionType		"C-MEX"
+	Inlined			yes
+	ExplicitFCSSCtrl	no
+	Asynchronous		no
+	FunctionLevel		2
+	DirectFeedthrough	[yes]
+	UsingUPtrs		[no]
+	InputContiguous		[yes]
+	DataStoreSource		[]
+	DataStoreGlobalDSM	[]
+	GlobalDataStoreSource	[]
+	SampleTimesToSet	Matrix(1,2)
+[[0, 0];]
+	DynamicallySizedVectors	["NonsampledZCs"]
+	SFcnmdlRoutines		["mdlInitializeSizes", "mdlInitializeSampleTimes", "mdlStart", "mdlOutputs", "mdlTerminate"]
+	AliasDataTypeCompliant	0
+	HasMdlProjection	no
+	IsLinearlyImplicit	no
+	MassMatrixType		0
+	HasVariableSampleTime	no
+      }
+      NumSFcnSysOutputCalls   0
+      NumSFcnSysOutputCallDsts 0
+      Parameters	      [1, 1]
+      Parameter {
+	Name			"p1"
+	ASTNode {
+	  IsNonTerminal		  0
+	  Op			  SL_NOT_INLINED
+	  ModelParameterIdx	  4
+	}
+	Value			[2.0]
+	ContainerCGTypeIdx	21
+	String			"2"
+	StringType		"Expression"
+      }
+      p1		      Parameter[0]
+    }
+    Block {
+      Type		      Scope
+      UseTLC		      1
+      BlockIdx		      [0, 0, 1]
+      SL_BlockIdx	      2
+      GrSrc		      [0, 1]
+      ExprCommentInfo {
+      }
+      ExprCommentSrcIdx {
+      }
       Name		      "<Root>/Scope"
       Identifier	      "Scope"
       TID		      0
       firstEntryOfTsMapIsGCD  yes
-      PWork		      [1, 2]
+      PWork		      [1, 0]
       NumDWork		      1
       DWork {
 	Name			"PWORK"
-	FirstRootIdx		2
+	FirstRootIdx		0
       }
       RollRegions	      [0]
       NumDataInputPorts	      1
@@ -2406,54 +2307,6 @@ CompiledModel {
       }
     }
     Block {
-      Type		      Scope
-      UseTLC		      1
-      BlockIdx		      [0, 0, 1]
-      SL_BlockIdx	      4
-      GrSrc		      [0, 3]
-      ExprCommentInfo {
-      }
-      ExprCommentSrcIdx {
-      }
-      Name		      "<Root>/Scope1"
-      Identifier	      "Scope1"
-      TID		      1
-      firstEntryOfTsMapIsGCD  yes
-      PWork		      [1, 3]
-      NumDWork		      1
-      DWork {
-	Name			"PWORK"
-	FirstRootIdx		3
-      }
-      RollRegions	      [0]
-      NumDataInputPorts	      1
-      DataInputPort {
-	SignalSrc		[b2]
-	SignalRegion		[0@1]
-      }
-      NumDataOutputPorts      0
-      NumPWorkDefines	      1
-      PWorkDefine {
-	Name			"LoggedData"
-	Width			1
-	StartIndex		0
-      }
-      ParamSettings {
-	SaveToWorkspace		no
-	SaveName		ScopeData1
-	MaxDataPoints		[5000]
-	Decimation		[1]
-	DataFormat		"StructureWithTime"
-	AxesTitles {
-	  axes1			  ""
-	}
-	AxesLabels {
-	  axes1			  ""
-	}
-	PlotStyles		[1]
-      }
-    }
-    Block {
       Type		      Opaque
       BlockIdx		      [0, 0, 2]
       SL_BlockIdx	      2
@@ -2463,75 +2316,47 @@ CompiledModel {
       }
       Name		      "<Root>/Opaque"
       Identifier	      "PulseGenerator"
-      InputPortSampleTimes    []
-      OutputPortSampleTimes   []
-      InputPortOffsetTimes    []
-      OutputPortOffsetTimes   []
-      TID		      [0, 1]
+      TID		      0
       firstEntryOfTsMapIsGCD  yes
       NumDataOutputPorts      0
-      TLCFileName	      "s0_b0_if8wh"
+      TLCFileName	      "s0_b0_cxdoj"
       OpaqueBlockMethode {
 	HasOutputs		1
+	HasTerminate		1
 	HasModelInitialize	1
       }
-      Parameters	      [7, 8]
+      Parameters	      [4, 4]
       Parameter {
 	Name			"Amplitude"
 	MdlPrmIdx		0
-	Value			[2.0]
-	ContainerCGTypeIdx	23
-	String			"2"
+	Value			[1.0]
+	ContainerCGTypeIdx	21
+	String			"1"
 	StringType		"Expression"
       }
       Parameter {
 	Name			"Period"
 	MdlPrmIdx		1
-	Value			[1000.0]
-	CGTypeIdx		0
-	String			""
-	StringType		"Computed"
+	Value			[10.0]
+	ContainerCGTypeIdx	21
+	String			"10"
+	StringType		"Expression"
       }
       Parameter {
 	Name			"PulseWidth"
 	MdlPrmIdx		2
-	Value			[50.0]
-	CGTypeIdx		0
-	String			""
-	StringType		"Computed"
+	Value			[5.0]
+	ContainerCGTypeIdx	21
+	String			"5"
+	StringType		"Expression"
       }
       Parameter {
 	Name			"PhaseDelay"
 	MdlPrmIdx		3
-	ContainerCGTypeIdx	23
+	ContainerCGTypeIdx	21
 	String			"0"
 	StringType		"Expression"
 	NeedParenthesis		1
-      }
-      Parameter {
-	Name			"Numerator"
-	MdlPrmIdx		4
-	Value			[1.0]
-	ContainerCGTypeIdx	23
-	String			"[1]"
-	StringType		"Expression"
-      }
-      Parameter {
-	Name			"Denominator"
-	MdlPrmIdx		5
-	Value			[1.0, 0.5]
-	CGTypeIdx		18
-	ContainerCGTypeIdx	17
-	String			"[1 0.5]"
-	StringType		"Expression"
-	NeedParenthesis		1
-      }
-      Parameter {
-	Name			"InitialStates"
-	MdlPrmIdx		6
-	ContainerCGTypeIdx	23
-	String			"0"
-	StringType		"Expression"
       }
     }
     EmptySubsysInfo {
@@ -2541,15 +2366,15 @@ CompiledModel {
   ChildMdls {
     NumChildMdls	    1
     ChildMdl {
-      MdlName		      "test"
-      RefPath		      "test"
+      MdlName		      "testSetParam"
+      RefPath		      "testSetParam"
       IsSingleInst	      0
     }
   }
   StateflowAutoEnumInfoList {
   }
-  BlockParamChecksum	  ["3713052726U", "98670681U", "3404929605U", "1845360392U"]
-  ModelChecksum		  ["3531395276U", "3407967652U", "1218549062U", "3708142253U"]
+  BlockParamChecksum	  ["2594918085U", "2098172876U", "1248281174U", "3585338677U"]
+  ModelChecksum		  ["357077256U", "2345975129U", "3432756365U", "908555392U"]
   IncludeCodeGenSettings  1
   CGTypes {
     CGTypeDefaults {
@@ -2565,7 +2390,7 @@ CompiledModel {
       CGTypeIdx		      0
       Alignment		      -1
     }
-    NumCGTypes		    24
+    NumCGTypes		    22
     DeclareUsedMultiWordBits 0
     CGType {
       Name		      "real_T"
@@ -2653,46 +2478,22 @@ CompiledModel {
       Constructor	      "enum"
     }
     CGType {
-      Width		      2
-      Constructor	      "matrix"
-      NumDimensions	      1
-      Dimensions	      [2]
-    }
-    CGType {
-      Width		      2
-      Constructor	      "matrix"
-      Dimensions	      [1, 2]
-    }
-    CGType {
-      Name		      "B_test_T"
+      Name		      "B_testSetParam_T"
       Constructor	      "struct"
       Members {
-	NumMembers		3
+	NumMembers		1
 	Member {
-	  Name			  "PulseGenerator"
-	}
-	Member {
-	  Name			  "RateTransition"
-	}
-	Member {
-	  Name			  "DiscreteFilter"
+	  Name			  "SFunction"
 	}
       }
     }
     CGType {
-      Name		      "DW_test_T"
+      Name		      "DW_testSetParam_T"
       Constructor	      "struct"
       Members {
-	NumMembers		4
-	Member {
-	  Name			  "DiscreteFilter_states"
-	}
+	NumMembers		2
 	Member {
 	  Name			  "Scope_PWORK"
-	  CGTypeIdx		  11
-	}
-	Member {
-	  Name			  "Scope1_PWORK"
 	  CGTypeIdx		  11
 	}
 	Member {
@@ -2702,10 +2503,10 @@ CompiledModel {
       }
     }
     CGType {
-      Name		      "P_test_T"
+      Name		      "P_testSetParam_T"
       Constructor	      "struct"
       Members {
-	NumMembers		7
+	NumMembers		5
 	Member {
 	  Name			  "PulseGenerator_Amp"
 	}
@@ -2719,14 +2520,7 @@ CompiledModel {
 	  Name			  "PulseGenerator_PhaseDelay"
 	}
 	Member {
-	  Name			  "DiscreteFilter_NumCoef"
-	}
-	Member {
-	  Name			  "DiscreteFilter_DenCoef"
-	  CGTypeIdx		  17
-	}
-	Member {
-	  Name			  "DiscreteFilter_InitialStates"
+	  Name			  "SFunction_p1"
 	}
       }
     }
@@ -2787,28 +2581,27 @@ CompiledModel {
     NumRTWCGModules	    1
     TestInterfaceFcnIdx	    -1
     RTWCGModule {
-      RateGrouping	      1
-      TLCFileName	      "s0_b0_if8wh"
+      RateGrouping	      0
+      TLCFileName	      "s0_b0_cxdoj"
       RTWFcnConst {
 	HasInstanceSetup	"no"
-	baseTidOfTasks		"[0, 1]"
-	Outputs_FunctionTID0 {
+	Outputs_Function {
 	  HasTidArg		  0
 	  HasCpiArg		  0
-	  TLCFileName		  "s0_b0_if8wh_Outputs"
-	  StackSize		  0
+	  TLCFileName		  "s0_b0_cxdoj_Outputs"
+	  StackSize		  8
 	}
-	Outputs_FunctionTID1 {
+	Terminate_Function {
 	  HasTidArg		  0
 	  HasCpiArg		  0
-	  TLCFileName		  "s0_b0_if8wh_Outputs"
+	  TLCFileName		  "s0_b0_cxdoj_Terminate"
 	  StackSize		  8
 	}
 	ModelInitialize_Function {
 	  HasTidArg		  0
 	  HasCpiArg		  0
-	  TLCFileName		  "s0_b0_if8wh_ModelInitialize"
-	  StackSize		  0
+	  TLCFileName		  "s0_b0_cxdoj_ModelInitialize"
+	  StackSize		  8
 	}
       }
       CGSystemIdx	      0
@@ -2817,29 +2610,31 @@ CompiledModel {
       NumSubFunctions	      0
       SystemFunctions {
 	Outputs			0
-	OutputsTID1		1
+	Terminate		1
 	ModelInitialize		2
       }
       SystemFunctionTypes {
-	Outputs_TID0		0
-	Outputs_TID1		1
+	Outputs			0
+	Terminate		1
 	ModelInitialize		2
       }
       Function {
 	Name			"Outputs"
+	HasLocalData		1
 	FunctionType		"Output"
-	NumTLCInterfaceFcns	2
+	NumTLCInterfaceFcns	5
       }
       Function {
-	Name			"Outputs"
-	FunctionType		"Output"
-	FcnTID			1
-	NumTLCInterfaceFcns	2
+	Name			"Terminate"
+	HasLocalData		1
+	FunctionType		"Terminate"
+	NumTLCInterfaceFcns	3
       }
       Function {
 	Name			"ModelInitialize"
+	HasLocalData		1
 	FunctionType		"ModelInitialize"
-	NumTLCInterfaceFcns	4
+	NumTLCInterfaceFcns	5
       }
     }
   }
@@ -2860,38 +2655,38 @@ CompiledModel {
       HasElement	      ""
     }
     VarGroup {
-      Name		      "test_B"
+      Name		      "testSetParam_B"
       SysIdx		      0
-      HasElement	      "B_TEST_T_VARIANT_EXISTS"
+      HasElement	      "B_TESTSETPARAM_T_VARIANT_EXISTS"
       InstanceIdx	      -1
-      CGTypeIdx		      19
+      CGTypeIdx		      17
       GlobalOffset	      0
-      NumVarGroupElements     3
-      VarGroupElements	      [B0, B1, B2]
+      NumVarGroupElements     1
+      VarGroupElements	      [B0]
     }
     VarGroup {
-      Name		      "test_DW"
+      Name		      "testSetParam_DW"
       Category		      "DWork"
       LocalName		      "localDW"
       SysIdx		      0
-      HasElement	      "DW_TEST_T_VARIANT_EXISTS"
+      HasElement	      "DW_TESTSETPARAM_T_VARIANT_EXISTS"
       InstanceIdx	      -1
-      CGTypeIdx		      20
+      CGTypeIdx		      18
       GlobalOffset	      0
-      NumVarGroupElements     4
-      VarGroupElements	      [W0, W2, W3, W4]
+      NumVarGroupElements     2
+      VarGroupElements	      [W0, W1]
     }
     VarGroup {
-      Name		      "test_P"
+      Name		      "testSetParam_P"
       Category		      "Parameter"
       LocalName		      "localP"
       SysIdx		      0
-      HasElement	      "P_TEST_T_VARIANT_EXISTS"
+      HasElement	      "P_TESTSETPARAM_T_VARIANT_EXISTS"
       InstanceIdx	      -1
-      CGTypeIdx		      21
+      CGTypeIdx		      19
       GlobalOffset	      0
-      NumVarGroupElements     7
-      VarGroupElements	      [P0, P1, P2, P3, P4, P5, P6]
+      NumVarGroupElements     5
+      VarGroupElements	      [P0, P1, P2, P3, P4]
     }
     VarGroupVarIdx	    []
   }
